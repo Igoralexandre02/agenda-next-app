@@ -1,6 +1,6 @@
 import { CriarStatus, EditarStatus } from '../types/status';
 
-const API_URL = process.env.NEXT_LOCAL_API_URL;
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export async function getStatus() {
   const response = await fetch(`${API_URL}/api/statuses`);

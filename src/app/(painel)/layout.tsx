@@ -15,15 +15,11 @@ export default function PainelLayout({
   useEffect(() => {
     const token = localStorage.getItem('token');
 
-    console.log('TOKEN:', token);
-
     if (!token) {
-      console.log('Sem autenticação. Redirecionando...');
       router.replace('/login');
       return;
     }
 
-    console.log('Usuário autenticado');
     setVerificando(false);
   }, [router]);
 

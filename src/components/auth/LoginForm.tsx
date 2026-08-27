@@ -67,12 +67,12 @@ export default function LoginForm() {
 
         <Form onSubmit={handleSubmit}>
           <Field>
-            <Label htmlFor="email">E-mail</Label>
+            <Label htmlFor="cpf">CPF</Label>
 
             <Input
-              id="email"
-              type="email"
-              placeholder="Digite seu e-mail"
+              id="cpf"
+              type="text"
+              placeholder="Digite seu CPF"
               value={identifier}
               onChange={(event) => setIdentifier(event.target.value)}
               required

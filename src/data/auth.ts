@@ -1,6 +1,6 @@
 import { LoginData, LoginResponse, User } from '@/src/types/user';
 
-const API_URL = process.env.NEXT_LOCAL_API_URL;
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export async function login(
   data: LoginData
@@ -14,7 +14,7 @@ export async function login(
   });
 
   if (!response.ok) {
-    throw new Error('E-mail ou senha inválidos');
+    throw new Error('CPF ou senha inválidos');
   }
 
   return response.json();
