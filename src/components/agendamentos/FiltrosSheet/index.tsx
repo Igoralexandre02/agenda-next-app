@@ -10,7 +10,6 @@ import { SegmentedControl } from '@/src/components/SegmentedControl';
 import {
   FILTROS_PADRAO,
   PERIODO_LABEL,
-  STATUS_LABEL,
   type FiltrosAgendamento,
   type PeriodoFiltro,
   type StatusFiltro,

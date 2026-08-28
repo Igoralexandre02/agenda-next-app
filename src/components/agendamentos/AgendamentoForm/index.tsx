@@ -7,19 +7,19 @@ import { DateField } from '@/src/components/DateField';
 import { Input } from '@/src/components/Input';
 import { Select } from '@/src/components/Select';
 import { TimeField } from '@/src/components/TimeField';
-import type { Agendamento, AgendamentoInput} from '@/src/types/agendamento';
+import type { AgendamentoInput } from '@/src/types/agendamento';
 import { hojeISO } from '@/src/utils/date';
 import { mascararTelefone, telefoneValido } from '@/src/utils/phone';
 import { useStatus } from '@/src/hooks/useStatus';
-
 import { Actions, Form, FormError, Row } from './styles';
+import { Status } from '@/src/types/status';
 
 interface CamposForm {
   nome: string;
   telefone: string;
   data: string;
   horario: string;
-  statusId: number | '';
+  status: Status | null;
 }
 
 type Erros = Partial<Record<keyof CamposForm, string>>;
@@ -39,7 +39,7 @@ function valoresIniciais(
     telefone: inicial?.telefone ?? '',
     data: inicial?.data ?? hojeISO(),
     horario: inicial?.horario ?? '',
-    statusId: inicial?.statusId ?? "",
+    status: inicial?.status ?? null,
   };
 }
 
@@ -62,8 +62,8 @@ function validar(campos: CamposForm): Erros {
     erros.horario = 'Selecione o horário';
   }
 
-  if (!campos.statusId) {
-    erros.statusId = 'Selecione o status';
+  if (!campos.status) {
+    erros.status = 'Selecione o status';
   }
 
   return erros;
@@ -76,11 +76,9 @@ export function AgendamentoForm({
   onCancel,
 }: AgendamentoFormProps) {
   const { status, loading: loadingStatus, error: erroStatus, } = useStatus();
-  console.log("STATUS:", status)
   const [campos, setCampos] = useState<CamposForm>(() =>
     valoresIniciais(initialValue),
   );
-
   const [erros, setErros] = useState<Erros>({});
   const [tentouEnviar, setTentouEnviar] = useState(false);
   const [enviando, setEnviando] = useState(false);
@@ -124,7 +122,7 @@ export function AgendamentoForm({
         telefone: campos.telefone.trim(),
         data: campos.data,
         horario: campos.horario,
-        statusId: Number(campos.statusId),
+        status: campos.status,
       });
     } catch (err) {
       setErroGeral(
@@ -200,15 +198,15 @@ export function AgendamentoForm({
       </Row>
       <Select
         label="Status"
-        value={String(campos.statusId)}
+        value={String(campos.status?.id)}
         onChange={(e) =>
           atualizar(
-            'statusId',
-            e.target.value ? Number(e.target.value) : '',
+            'status',
+            e.target.value ?? '',
           )
         }
         disabled={loadingStatus}
-        error={erros.statusId}
+        error={erros.status}
         options={[
           {
             value: '',

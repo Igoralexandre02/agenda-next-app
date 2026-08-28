@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 
 import { Button } from '@/src/components/Button';
 import { Input } from '@/src/components/Input';
-import { entrar } from '@/src/services/auth.service';
+import { login } from '@/src/services/auth.service';
 import { USE_MOCK } from '@/src/services/config';
 import { salvarToken } from '@/src/lib/auth';
 
@@ -33,8 +33,9 @@ export default function LoginForm() {
     setLoading(true);
 
     try {
-      const resposta = await entrar({ identifier, password });
-      salvarToken(resposta.jwt);
+      const response = await login({ identifier, password });
+
+      salvarToken(response.jwt);
       router.replace('/');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erro ao realizar login');

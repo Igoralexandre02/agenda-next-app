@@ -14,7 +14,7 @@ export interface Agendamento {
   telefone: string;
   data: string;
   horario: string;
-  statusId: number;
+  status: Status | null;
   created_at: string;
   updated_at: string;
 }
@@ -25,7 +25,7 @@ export interface AgendamentoInput {
   telefone: string;
   data: string;
   horario: string;
-  statusId: number;
+  status: Status | null;
 }
 
 export type PeriodoFiltro =

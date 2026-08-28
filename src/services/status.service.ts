@@ -1,9 +1,8 @@
 import { Status} from '../types/status';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+import { apiFetch } from './api';
 
 export async function getStatus() {
-  const response = await fetch(`${API_URL}/api/statuses`);
+  const response = await apiFetch(`/api/statuses`);
 
   if (!response.ok) {
     throw new Error('Erro ao buscar status');
@@ -13,7 +12,7 @@ export async function getStatus() {
 }
 
 export async function getStatusById(id: string) {
-  const response = await fetch(`${API_URL}/api/statuses/${id}`);
+  const response = await apiFetch(`/api/statuses/${id}`);
 
   if (!response.ok) {
     throw new Error('Erro ao buscar status');
@@ -23,10 +22,9 @@ export async function getStatusById(id: string) {
 }
 
 export async function editarStatus(
-  id: string,
-  data: { EditarStatus: Status },
+  data: { status: Status },
 ) {
-  const response = await fetch(`${API_URL}/api/statuses/${id}`, {
+  const response = await apiFetch(`/api/statuses/${data.status.id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -43,8 +41,8 @@ export async function editarStatus(
   return response.json();
 }
 
-export async function criarStatus(data: { CriarStatus: Status }) {
-  const response = await fetch(`${API_URL}/api/statuses`, {
+export async function criarStatus(data: { status: Status }) {
+  const response = await apiFetch(`/api/statuses`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -62,7 +60,7 @@ export async function criarStatus(data: { CriarStatus: Status }) {
 }
 
 export async function deletarStatus(id: string) {
-  const response = await fetch(`${API_URL}/api/statuses/${id}`, {
+  const response = await apiFetch(`/api/statuses/${id}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
