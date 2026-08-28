@@ -1,4 +1,4 @@
-import { CriarStatus, EditarStatus } from '../types/status';
+import { Status} from '../types/status';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -24,7 +24,7 @@ export async function getStatusById(id: string) {
 
 export async function editarStatus(
   id: string,
-  data: { EditarStatus: EditarStatus },
+  data: { EditarStatus: Status },
 ) {
   const response = await fetch(`${API_URL}/api/statuses/${id}`, {
     method: 'PUT',
@@ -43,7 +43,7 @@ export async function editarStatus(
   return response.json();
 }
 
-export async function criarStatus(data: { CriarStatus: CriarStatus }) {
+export async function criarStatus(data: { CriarStatus: Status }) {
   const response = await fetch(`${API_URL}/api/statuses`, {
     method: 'POST',
     headers: {

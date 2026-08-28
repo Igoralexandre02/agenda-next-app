@@ -3,21 +3,20 @@
 import { FormEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { login } from '@/src/data/auth';
+import { Button } from '@/src/components/Button';
+import { Input } from '@/src/components/Input';
+import { entrar } from '@/src/services/auth.service';
+import { USE_MOCK } from '@/src/services/config';
 import { salvarToken } from '@/src/lib/auth';
 
 import {
-  Container,
   Card,
-  Title,
-  Subtitle,
-  Form,
-  Field,
-  Label,
-  Input,
+  Container,
   ErrorMessage,
-  Button,
+  Form,
   Header,
+  Subtitle,
+  Title,
 } from './LoginForm.styles';
 
 export default function LoginForm() {
@@ -25,32 +24,20 @@ export default function LoginForm() {
 
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
-
   const [loading, setLoading] = useState(false);
-  const [error, setErro] = useState('');
+  const [error, setError] = useState('');
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-
-    setErro('');
+    setError('');
     setLoading(true);
 
     try {
-      const resposta = await login({
-        identifier,
-        password,
-      });
-
+      const resposta = await entrar({ identifier, password });
       salvarToken(resposta.jwt);
-
       router.replace('/');
-    } catch (error) {
-      setErro(
-        error instanceof Error
-          ? error.message
-          : 'Erro ao realizar login',
-      );
-    } finally {
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Erro ao realizar login');
       setLoading(false);
     }
   }
@@ -60,42 +47,38 @@ export default function LoginForm() {
       <Card>
         <Header>
           <Title>Entrar</Title>
-          <Subtitle>
-            Acesse o sistema de gerenciamento da barbearia
-          </Subtitle>
+          <Subtitle>Acesse o painel de agendamentos da barbearia</Subtitle>
         </Header>
 
         <Form onSubmit={handleSubmit}>
-          <Field>
-            <Label htmlFor="cpf">CPF</Label>
+          <Input
+            id="identifier"
+            label="CPF"
+            placeholder={
+              USE_MOCK ? 'Qualquer valor (modo demonstração)' : 'Digite seu CPF'
+            }
+            inputMode="numeric"
+            value={identifier}
+            onChange={(e) => setIdentifier(e.target.value)}
+            autoComplete="username"
+            required
+          />
 
-            <Input
-              id="cpf"
-              type="text"
-              placeholder="Digite seu CPF"
-              value={identifier}
-              onChange={(event) => setIdentifier(event.target.value)}
-              required
-            />
-          </Field>
+          <Input
+            id="password"
+            label="Senha"
+            type="password"
+            placeholder="Digite sua senha"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            autoComplete="current-password"
+            required
+          />
 
-          <Field>
-            <Label htmlFor="password">Senha</Label>
+          {error && <ErrorMessage role="alert">{error}</ErrorMessage>}
 
-            <Input
-              id="password"
-              type="password"
-              placeholder="Digite sua senha"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              required
-            />
-          </Field>
-
-          {error && <ErrorMessage>{error}</ErrorMessage>}
-
-          <Button type="submit" disabled={loading}>
-            {loading ? 'Entrando...' : 'Entrar'}
+          <Button type="submit" size="lg" fullWidth loading={loading}>
+            Entrar
           </Button>
         </Form>
       </Card>

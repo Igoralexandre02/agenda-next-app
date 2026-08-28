@@ -1,4 +1,4 @@
-import { CriarAgendamento, EditarAgendamento } from '../types/agendamentos';
+import { AgendamentoInput } from '../types/agendamento';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -25,7 +25,7 @@ export async function getAgendamentoById(id: string) {
 export async function editarAgendamento(
   id: string,
   data: {
-    EditarAgendamento: EditarAgendamento;
+    EditarAgendamento: AgendamentoInput;
   },
 ) {
   const response = await fetch(`${API_URL}/api/agendamentos/${id}`, {
@@ -46,7 +46,7 @@ export async function editarAgendamento(
 }
 
 export async function criarAgendamento(data: {
-  CriarAgendamento: CriarAgendamento;
+  CriarAgendamento: AgendamentoInput;
 }) {
   const response = await fetch(`${API_URL}/api/agendamentos`, {
     method: 'POST',
@@ -60,6 +60,32 @@ export async function criarAgendamento(data: {
 
   if (!response.ok) {
     throw new Error('Erro ao criar agendamento');
+  }
+
+  return response.json();
+}
+
+export async function alterarStatusAgendamento(
+  id: string,
+  statusId: number,
+) {
+  const response = await fetch(
+    `${API_URL}/api/agendamentos/${id}`,
+    {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        data: {
+          statusId,
+        },
+      }),
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error('Erro ao alterar status do agendamento');
   }
 
   return response.json();
@@ -79,3 +105,4 @@ export async function deletarAgendamento(id: string) {
 
   return response.json();
 }
+

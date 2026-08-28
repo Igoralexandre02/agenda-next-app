@@ -2,7 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { LoadingContainer, Spinner, LoadingText } from '@/src/components/auth/LoginForm.styles';
+
+import { AppShell } from '@/src/components/AppShell';
+import { Loading } from '@/src/components/Loading';
+import { obterToken } from '@/src/lib/auth';
 
 export default function PainelLayout({
   children,
@@ -13,24 +16,17 @@ export default function PainelLayout({
   const [verificando, setVerificando] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-
-    if (!token) {
+    if (!obterToken()) {
       router.replace('/login');
       return;
     }
-
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setVerificando(false);
   }, [router]);
 
   if (verificando) {
-    return (
-      <LoadingContainer>
-        <Spinner />
-        <LoadingText>Verificando credenciais...</LoadingText>
-      </LoadingContainer>
-    );
+    return <Loading label="Verificando credenciais…" />;
   }
 
-  return <>{children}</>;
+  return <AppShell>{children}</AppShell>;
 }

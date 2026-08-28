@@ -2,9 +2,7 @@ import { LoginData, LoginResponse, User } from '@/src/types/user';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export async function login(
-  data: LoginData
-): Promise<LoginResponse> {
+export async function login(data: LoginData): Promise<LoginResponse> {
   const response = await fetch(`${API_URL}/api/auth/local`, {
     method: 'POST',
     headers: {

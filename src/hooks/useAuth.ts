@@ -1,11 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getMe } from '@/src/data/auth';
-import {
-  obterToken,
-  removerToken,
-} from '@/src/lib/auth';
+
+import { getMe } from '@/src/services/auth.service';
+import { obterToken, removerToken } from '@/src/lib/auth';
 import type { User } from '@/src/types/user';
 
 export function useAuth() {
@@ -13,27 +11,32 @@ export function useAuth() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let ativo = true;
+
     async function verificarAutenticacao() {
       const token = obterToken();
 
       if (!token) {
-        setLoading(false);
+        if (ativo) setLoading(false);
         return;
       }
 
       try {
         const usuario = await getMe(token);
-
-        setUser(usuario);
+        if (ativo) setUser(usuario);
       } catch {
         removerToken();
-        setUser(null);
+        if (ativo) setUser(null);
       } finally {
-        setLoading(false);
+        if (ativo) setLoading(false);
       }
     }
 
     verificarAutenticacao();
+
+    return () => {
+      ativo = false;
+    };
   }, []);
 
   return {

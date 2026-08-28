@@ -1,69 +1,136 @@
-import Image from 'next/image';
+'use client';
 
-export default function Home() {
+import { useMemo } from 'react';
+import { useRouter } from 'next/navigation';
+
+import { AppointmentCard } from '@/src/components/AppointmentCard';
+import { Button } from '@/src/components/Button';
+import { EmptyState } from '@/src/components/EmptyState';
+import { ErrorState } from '@/src/components/ErrorState';
+import { Header } from '@/src/components/Header';
+import { PlusIcon } from '@/src/components/icons';
+import { AppointmentListSkeleton } from '@/src/components/Skeleton';
+import { useAgendamentos } from '@/src/hooks/useAgendamentos';
+import type { Agendamento } from '@/src/types/agendamento';
+import {
+  ordenarPorDataHora,
+  proximoAtendimento,
+  resumoDoDia,
+} from '@/src/utils/agendamentos';
+import { formatarDataCurta, hojeISO, nomeDiaSemana } from '@/src/utils/date';
+
+import {
+  Body,
+  DataHoje,
+  DiaSemana,
+  Hero,
+  ItemProximo,
+  Lista,
+  ProximoLabel,
+  Resumo,
+  ResumoCard,
+  ResumoLabel,
+  ResumoValor,
+  Saudacao,
+  SectionHead,
+  SectionTitle,
+  VerTodos,
+} from './dashboard.styles';
+
+export default function DashboardPage() {
+  const router = useRouter();
+  const { todos, loading, error, recarregar } = useAgendamentos();
+
+  const hoje = hojeISO();
+
+  const doDia = useMemo(
+    () => ordenarPorDataHora(todos.filter((a) => a.data === hoje)),
+    [todos, hoje],
+  );
+  const resumo = useMemo(() => resumoDoDia(todos), [todos]);
+  const proximo = useMemo(() => proximoAtendimento(todos), [todos]);
+
+  function abrir(agendamento: Agendamento) {
+    router.push(`/agendamentos/${agendamento.id}`);
+  }
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{' '}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{' '}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{' '}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{' '}
-            or the{' '}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{' '}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <>
+      <Header title="Início" />
+      <Body>
+        <Hero>
+          <Saudacao>Olá, Barbeiro 👋</Saudacao>
+          <DataHoje>{formatarDataCurta(hoje)}</DataHoje>
+          <DiaSemana>{nomeDiaSemana(hoje)}</DiaSemana>
+        </Hero>
+
+        <Button
+          size="lg"
+          fullWidth
+          leftIcon={<PlusIcon width={20} height={20} />}
+          onClick={() => router.push('/agendamentos/novo')}
+        >
+          Novo agendamento
+        </Button>
+
+        <Resumo>
+          <ResumoCard>
+            <ResumoValor>{resumo.total}</ResumoValor>
+            <ResumoLabel>Hoje</ResumoLabel>
+          </ResumoCard>
+          <ResumoCard>
+            <ResumoValor>{resumo.agendados}</ResumoValor>
+            <ResumoLabel>Agendados</ResumoLabel>
+          </ResumoCard>
+          <ResumoCard>
+            <ResumoValor>{resumo.finalizados}</ResumoValor>
+            <ResumoLabel>Finalizados</ResumoLabel>
+          </ResumoCard>
+        </Resumo>
+
+        <section>
+          <SectionHead>
+            <SectionTitle>Próximos atendimentos</SectionTitle>
+            <VerTodos onClick={() => router.push('/agendamentos')}>
+              Ver todos
+            </VerTodos>
+          </SectionHead>
+        </section>
+
+        {loading && <AppointmentListSkeleton rows={3} />}
+
+        {!loading && error && (
+          <ErrorState description={error} onRetry={recarregar} />
+        )}
+
+        {!loading && !error && doDia.length === 0 && (
+          <EmptyState
+            title="Nenhum atendimento hoje"
+            description="Você ainda não possui agendamentos para hoje."
+            action={
+              <Button
+                leftIcon={<PlusIcon width={18} height={18} />}
+                onClick={() => router.push('/agendamentos/novo')}
+              >
+                Novo agendamento
+              </Button>
+            }
+          />
+        )}
+
+        {!loading && !error && doDia.length > 0 && (
+          <Lista>
+            {doDia.map((item) => (
+              <ItemProximo key={item.id}>
+                {proximo?.id === item.id && (
+                  <ProximoLabel>● Próximo</ProximoLabel>
+                )}
+                <AppointmentCard agendamento={item} onClick={abrir} />
+              </ItemProximo>
+            ))}
+          </Lista>
+        )}
+      </Body>
+    </>
   );
 }

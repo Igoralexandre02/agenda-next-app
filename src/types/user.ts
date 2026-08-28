@@ -2,7 +2,7 @@ export interface User {
   id: number;
   username: string;
   email: string;
-  cpf: string
+  cpf: string;
 }
 
 export interface LoginResponse {
