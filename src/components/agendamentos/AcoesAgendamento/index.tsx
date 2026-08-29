@@ -48,7 +48,7 @@ export function AcoesAgendamento({
   const toast = useToast();
   const [confirmacao, setConfirmacao] = useState<Confirmacao>(null);
 
-  const encerrado = agendamento.status?.nome !== 'agendado';
+  const encerrado = agendamento.status_id?.nome !== 'agendado';
 
   async function finalizar() {
     await alterarStatusAgendamento(String(agendamento.documentId), 4);
@@ -98,7 +98,7 @@ export function AcoesAgendamento({
             variant="secondary"
             fullWidth
             leftIcon={<XIcon width={18} height={18} />}
-            disabled={agendamento.status?.nome === 'Cancelado'}
+            disabled={agendamento.status_id?.nome === 'Cancelado'}
             onClick={() => setConfirmacao('cancelar')}
           >
             Cancelar agendamento

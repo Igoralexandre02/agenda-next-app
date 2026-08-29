@@ -86,7 +86,7 @@ export default function DetalhesAgendamentoPage({
               <Linha>
                 <Rotulo>Status</Rotulo>
                 <div>
-                  <StatusBadge status={agendamento.status?.nome} size="sm" />
+                  <StatusBadge status={agendamento.status_id?.nome} size="sm" />
                 </div>
               </Linha>
             </Cartao>

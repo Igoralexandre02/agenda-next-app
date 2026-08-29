@@ -39,7 +39,7 @@ export function FiltrosSheet({
   filtros,
   onApply,
 }: FiltrosSheetProps) {
-  const { status, loading: loadingStatus, error: erroStatus } = useStatus();
+  const { status } = useStatus();
   const [rascunho, setRascunho] = useState<FiltrosAgendamento>(filtros);
 
   // Sincroniza o rascunho sempre que o sheet abre.

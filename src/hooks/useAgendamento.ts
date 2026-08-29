@@ -20,24 +20,27 @@ export function useAgendamento(documentId: string): UseAgendamentoResult {
 
   useEffect(() => {
     let ativo = true;
-    setLoading(true);
-    setError(null);
 
     getAgendamentoById(documentId)
       .then((item) => {
-        if (ativo) setAgendamento(item);
+        if (!ativo) return;
+
+        setAgendamento(item);
+        setError(null);
       })
       .catch((err: unknown) => {
-        if (ativo) {
-          setError(
-            err instanceof Error
-              ? err.message
-              : 'Não foi possível carregar o agendamento',
-          );
-        }
+        if (!ativo) return;
+
+        setError(
+          err instanceof Error
+            ? err.message
+            : 'Não foi possível carregar o agendamento',
+        );
       })
       .finally(() => {
-        if (ativo) setLoading(false);
+        if (!ativo) return;
+
+        setLoading(false);
       });
 
     return () => {
@@ -45,7 +48,11 @@ export function useAgendamento(documentId: string): UseAgendamentoResult {
     };
   }, [documentId, versao]);
 
-  const recarregar = useCallback(() => setVersao((v) => v + 1), []);
+  const recarregar = useCallback(() => {
+    setLoading(true);
+    setError(null);
+    setVersao((v) => v + 1);
+  }, []);
 
   return { agendamento, loading, error, recarregar };
 }

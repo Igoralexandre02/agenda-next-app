@@ -1,16 +1,12 @@
 'use client';
 
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { PageBody } from '@/src/components/AppShell';
 import { Button } from '@/src/components/Button';
-import { ConfirmDialog } from '@/src/components/ConfirmDialog';
 import { Header } from '@/src/components/Header';
 import { useTheme } from '@/src/hooks/useTheme';
-import { useToast } from '@/src/hooks/useToast';
 import { removerToken } from '@/src/lib/auth';
-import { USE_MOCK } from '@/src/services/config';
 import type { ThemePreference } from '@/src/styles/themes';
 
 import {
@@ -20,7 +16,6 @@ import {
   ContaInfo,
   Grupo,
   GrupoTitulo,
-  Info,
   RadioDescricao,
   RadioLinha,
   RadioTexto,
@@ -45,9 +40,7 @@ const OPCOES_TEMA: {
 
 export default function ConfiguracoesPage() {
   const router = useRouter();
-  const toast = useToast();
   const { preference, setPreference } = useTheme();
-  const [confirmarReset, setConfirmarReset] = useState(false);
 
   function sair() {
     removerToken();
@@ -78,21 +71,6 @@ export default function ConfiguracoesPage() {
             ))}
           </Radios>
         </Grupo>
-
-        {USE_MOCK && (
-          <Grupo>
-            <GrupoTitulo>Dados de demonstração</GrupoTitulo>
-            <Info>
-              A aplicação está usando dados fictícios armazenados neste
-              dispositivo. Você pode restaurar os agendamentos de exemplo a
-              qualquer momento.
-            </Info>
-            <Button variant="secondary" onClick={() => setConfirmarReset(true)}>
-              Restaurar dados de exemplo
-            </Button>
-          </Grupo>
-        )}
-
         <Grupo>
           <ContaConteudo>
             <ContaInfo>
@@ -112,6 +90,7 @@ export default function ConfiguracoesPage() {
 
         <Rodape>Barbearia · Painel de agendamentos</Rodape>
       </PageBody>
+
     </>
   );
 }

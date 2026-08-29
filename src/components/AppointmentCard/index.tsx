@@ -19,26 +19,31 @@ export function AppointmentCard({
   return (
     <Card
       type="button"
-      $status={agendamento.status}
+      $status={agendamento.status_id}
       onClick={() => onClick?.(agendamento)}
       aria-label={`Agendamento de ${agendamento.nome} às ${formatarHorario(
         agendamento.horario,
-      )}, ${agendamento.status}`}
+      )}, ${agendamento.status_id?.nome ?? 'Sem status'}`}
     >
-      <TimeColumn $status={agendamento.status}>
-        <Time $status={agendamento.status}>
+      <TimeColumn $status={agendamento.status_id}>
+        <Time $status={agendamento.status_id}>
           {formatarHorario(agendamento.horario)}
         </Time>
       </TimeColumn>
 
       <Body>
         <Name>{agendamento.nome}</Name>
+
         <Phone>
           <PhoneIcon />
           {agendamento.numero}
         </Phone>
+
         <BadgeRow>
-          <StatusBadge status={agendamento.status?.nome} size="sm" />
+          <StatusBadge
+            status={agendamento.status_id?.nome}
+            size="sm"
+          />
         </BadgeRow>
       </Body>
     </Card>

@@ -79,7 +79,7 @@ export function aplicarFiltros(
   }
 
   if (filtros.status !== 'todos') {
-    resultado = resultado.filter((a) => a.status?.nome === filtros.status);
+    resultado = resultado.filter((a) => a.status_id?.nome === filtros.status);
   }
 
   const termo = filtros.busca.trim().toLowerCase();
@@ -112,7 +112,7 @@ export function proximoAtendimento(
 ): Agendamento | undefined {
   const hoje = hojeISO();
   return ordenarPorDataHora(
-    lista.filter((a) => a.data === hoje && a.status?.nome === 'agendado'),
+    lista.filter((a) => a.data === hoje && a.status_id?.nome === 'agendado'),
   )[0];
 }
 
@@ -128,8 +128,8 @@ export function resumoDoDia(lista: Agendamento[]): ResumoDia {
   const doDia = lista.filter((a) => a.data === hoje);
   return {
     total: doDia.length,
-    agendados: doDia.filter((a) => a.status?.nome === 'agendado').length,
-    finalizados: doDia.filter((a) => a.status?.nome === 'finalizado').length,
-    cancelados: doDia.filter((a) => a.status?.nome === 'cancelado').length,
+    agendados: doDia.filter((a) => a.status_id?.nome === 'agendado').length,
+    finalizados: doDia.filter((a) => a.status_id?.nome === 'finalizado').length,
+    cancelados: doDia.filter((a) => a.status_id?.nome === 'cancelado').length,
   };
 }

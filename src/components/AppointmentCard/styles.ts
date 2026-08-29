@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 
-import type { StatusAgendamento } from '@/src/types/agendamento';
+import type { Status } from '@/src/types/status';
 
 const acentoStatus = {
   agendado: css`
@@ -15,7 +15,19 @@ const acentoStatus = {
   `,
 } as const;
 
-export const Card = styled.button<{ $status: StatusAgendamento }>`
+type StatusNome = keyof typeof acentoStatus;
+
+function normalizarStatus(status: Status | null): StatusNome | null {
+  const nome = status?.nome?.toLowerCase();
+
+  if (nome === 'agendado') return 'agendado';
+  if (nome === 'finalizado') return 'finalizado';
+  if (nome === 'cancelado') return 'cancelado';
+
+  return null;
+}
+
+export const Card = styled.button<{ $status: Status | null }>`
   display: flex;
   align-items: stretch;
   gap: ${({ theme }) => theme.spacing.lg};
@@ -29,7 +41,9 @@ export const Card = styled.button<{ $status: StatusAgendamento }>`
     border-color ${({ theme }) => theme.transition.fast},
     transform ${({ theme }) => theme.transition.fast},
     box-shadow ${({ theme }) => theme.transition.fast};
-  opacity: ${({ $status }) => ($status === 'cancelado' ? 0.72 : 1)};
+
+  opacity: ${({ $status }) =>
+    $status?.nome?.toLowerCase() === 'cancelado' ? 0.72 : 1};
 
   &:hover {
     border-color: ${({ theme }) => theme.colors.borderStrong};
@@ -41,7 +55,7 @@ export const Card = styled.button<{ $status: StatusAgendamento }>`
   }
 `;
 
-export const TimeColumn = styled.div<{ $status: StatusAgendamento }>`
+export const TimeColumn = styled.div<{ $status: Status | null }>`
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
@@ -52,12 +66,17 @@ export const TimeColumn = styled.div<{ $status: StatusAgendamento }>`
   border-right: 1px solid ${({ theme }) => theme.colors.border};
 `;
 
-export const Time = styled.span<{ $status: StatusAgendamento }>`
+export const Time = styled.span<{ $status: Status | null }>`
   font-size: ${({ theme }) => theme.typography.size.xl};
   font-weight: ${({ theme }) => theme.typography.weight.bold};
   line-height: 1;
   letter-spacing: -0.02em;
-  ${({ $status }) => acentoStatus[$status]}
+
+  ${({ $status }) => {
+    const status = normalizarStatus($status);
+
+    return status ? acentoStatus[status] : undefined;
+  }}
 `;
 
 export const Body = styled.div`

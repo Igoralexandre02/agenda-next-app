@@ -11,7 +11,6 @@ export interface ConfirmDialogProps {
   description: string;
   confirmLabel?: string;
   cancelLabel?: string;
-  /** Usa o estilo de ação destrutiva no botão de confirmação. */
   destructive?: boolean;
   onConfirm: () => void | Promise<void>;
   onCancel: () => void;

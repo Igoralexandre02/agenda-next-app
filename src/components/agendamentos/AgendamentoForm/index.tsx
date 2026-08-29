@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { Button } from '@/src/components/Button';
 import { DateField } from '@/src/components/DateField';
@@ -20,7 +20,7 @@ interface CamposForm {
   numero: string;
   data: string;
   horario: string;
-  status: Status | null;
+  status_id: Status | null;
 }
 
 type Erros = Partial<Record<keyof CamposForm, string>>;
@@ -39,7 +39,7 @@ function valoresIniciais(inicial?: Partial<Agendamento>): CamposForm {
     numero: inicial?.numero ?? '',
     data: inicial?.data ?? hojeISO(),
     horario: inicial?.horario ?? '',
-    status: inicial?.status ?? null,
+    status_id: inicial?.status_id ?? null,
   };
 }
 
@@ -62,8 +62,8 @@ function validar(campos: CamposForm): Erros {
     erros.horario = 'Selecione o horário';
   }
 
-  if (!campos.status) {
-    erros.status = 'Selecione o status';
+  if (!campos.status_id) {
+    erros.status_id = 'Selecione o status';
   }
 
   return erros;
@@ -84,10 +84,6 @@ export function AgendamentoForm({
   const [tentouEnviar, setTentouEnviar] = useState(false);
   const [enviando, setEnviando] = useState(false);
   const [erroGeral, setErroGeral] = useState('');
-
-  useEffect(() => {
-    setCampos(valoresIniciais(initialValue));
-  }, [initialValue]);
 
   function atualizar<K extends keyof CamposForm>(
     chave: K,
@@ -130,7 +126,7 @@ export function AgendamentoForm({
         numero: campos.numero.trim(),
         data: campos.data,
         horario: campos.horario,
-        status: campos.status,
+        status_id: campos.status_id,
       });
     } catch (err) {
       setErroGeral(
@@ -187,16 +183,16 @@ export function AgendamentoForm({
       </Row>
       <Select
         label="Status"
-        value={String(campos.status?.id ?? '')}
+        value={String(campos.status_id?.id ?? '')}
         onChange={(e) => {
           const statusSelecionado = status.find(
             (item) => String(item.id) === e.target.value,
           );
 
-          atualizar('status', statusSelecionado ?? null);
+          atualizar('status_id', statusSelecionado ?? null);
         }}
         disabled={loadingStatus}
-        error={erros.status}
+        error={erros.status_id}
         options={[
           {
             value: '',

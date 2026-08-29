@@ -9,7 +9,7 @@ function formatarHorario(horario: string) {
   return horario;
 }
 
-function mapAgendamento(data: any): Agendamento {
+function mapAgendamento(data: Agendamento): Agendamento {
   return {
     id: data.id,
     documentId: data.documentId,
@@ -17,7 +17,7 @@ function mapAgendamento(data: any): Agendamento {
     numero: data.numero,
     data: data.data,
     horario: data.horario,
-    status: data.status_id ?? null,
+    status_id: data.status_id ?? null,
   };
 }
 
@@ -29,6 +29,8 @@ export async function getAgendamentos(): Promise<Agendamento[]> {
   }
 
   const json = await response.json();
+
+  console.log('AGENDAMENTOS API:', json);
 
   return json.data.map(mapAgendamento);
 }
@@ -48,6 +50,8 @@ export async function getAgendamentoById(
 
   const json = await response.json();
 
+  console.log('AGENDAMENTO API:', json);
+
   return mapAgendamento(json.data);
 }
 
@@ -61,7 +65,7 @@ export async function editarAgendamento(agendamento: Agendamento) {
       numero: agendamento.numero,
       data: agendamento.data,
       horario: formatarHorario(agendamento.horario),
-      status_id: agendamento.status?.id,
+      status_id: agendamento.status_id?.id,
     },
   };
   const response = await apiFetch(
@@ -89,7 +93,7 @@ export async function criarAgendamento(agendamento: Agendamento) {
       numero: agendamento.numero,
       data: agendamento.data,
       horario: `${agendamento.horario}:00.000`,
-      status_id: agendamento.status?.id,
+      status_id: agendamento.status_id?.id,
     },
   };
   const response = await apiFetch('/api/agendamentos', {

@@ -56,7 +56,7 @@ export default function EditarAgendamentoPage({
               numero: agendamento.numero,
               data: agendamento.data,
               horario: agendamento.horario,
-              status: agendamento.status,
+              status_id: agendamento.status_id,
             }}
             submitLabel="Salvar alterações"
             onSubmit={salvar}
