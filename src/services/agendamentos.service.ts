@@ -40,9 +40,7 @@ export async function getAgendamentoById(
     throw new Error('ID do agendamento não informado');
   }
 
-  const response = await apiFetch(
-    `/api/agendamentos/${documentId}?populate=*`,
-  );
+  const response = await apiFetch(`/api/agendamentos/${documentId}?populate=*`);
 
   if (!response.ok) {
     throw new Error('Erro ao buscar agendamento');
@@ -104,11 +102,10 @@ export async function criarAgendamento(agendamento: Agendamento) {
 
   const json = await response.json();
 
-  
   if (!response.ok) {
     throw new Error(json?.error?.message || 'Erro ao criar agendamento');
   }
-  
+
   return mapAgendamento(json.data);
 }
 
