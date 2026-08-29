@@ -20,10 +20,8 @@ export function useAgendamento(documentId: string): UseAgendamentoResult {
 
   useEffect(() => {
     let ativo = true;
-    /* eslint-disable react-hooks/set-state-in-effect */
     setLoading(true);
     setError(null);
-    /* eslint-enable react-hooks/set-state-in-effect */
 
     getAgendamentoById(documentId)
       .then((item) => {

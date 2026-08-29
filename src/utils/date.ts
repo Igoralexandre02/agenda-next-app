@@ -36,7 +36,7 @@ export function parseISODate(iso: string | Date): Date {
 
   if (typeof iso !== 'string') {
     throw new TypeError(
-      `Data inválida: esperado string ou Date, recebido ${typeof iso}`
+      `Data inválida: esperado string ou Date, recebido ${typeof iso}`,
     );
   }
 

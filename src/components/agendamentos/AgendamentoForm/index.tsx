@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Button } from '@/src/components/Button';
 import { DateField } from '@/src/components/DateField';
@@ -32,11 +32,9 @@ export interface AgendamentoFormProps {
   onCancel?: () => void;
 }
 
-function valoresIniciais(
-  inicial?: Partial<Agendamento>,
-): CamposForm {
+function valoresIniciais(inicial?: Partial<Agendamento>): CamposForm {
   return {
-    documentId: inicial?.documentId,
+    documentId: inicial?.documentId ?? '',
     nome: inicial?.nome ?? '',
     numero: inicial?.numero ?? '',
     data: inicial?.data ?? hojeISO(),
@@ -77,7 +75,8 @@ export function AgendamentoForm({
   onSubmit,
   onCancel,
 }: AgendamentoFormProps) {
-  const { status, loading: loadingStatus, error: erroStatus, } = useStatus();
+  const { status, loading: loadingStatus, error: erroStatus } = useStatus();
+
   const [campos, setCampos] = useState<CamposForm>(() =>
     valoresIniciais(initialValue),
   );
@@ -85,6 +84,10 @@ export function AgendamentoForm({
   const [tentouEnviar, setTentouEnviar] = useState(false);
   const [enviando, setEnviando] = useState(false);
   const [erroGeral, setErroGeral] = useState('');
+
+  useEffect(() => {
+    setCampos(valoresIniciais(initialValue));
+  }, [initialValue]);
 
   function atualizar<K extends keyof CamposForm>(
     chave: K,
@@ -127,7 +130,7 @@ export function AgendamentoForm({
         numero: campos.numero.trim(),
         data: campos.data,
         horario: campos.horario,
-        status: campos.status
+        status: campos.status,
       });
     } catch (err) {
       setErroGeral(
@@ -142,25 +145,15 @@ export function AgendamentoForm({
 
   return (
     <Form onSubmit={handleSubmit} noValidate>
-      {erroGeral && (
-        <FormError role="alert">
-          {erroGeral}
-        </FormError>
-      )}
+      {erroGeral && <FormError role="alert">{erroGeral}</FormError>}
 
-      {erroStatus && (
-        <FormError role="alert">
-          {erroStatus}
-        </FormError>
-      )}
+      {erroStatus && <FormError role="alert">{erroStatus}</FormError>}
 
       <Input
         label="Nome do cliente"
         placeholder="Ex: João da Silva"
         value={campos.nome}
-        onChange={(e) =>
-          atualizar('nome', e.target.value)
-        }
+        onChange={(e) => atualizar('nome', e.target.value)}
         error={erros.nome}
         autoComplete="name"
         autoCapitalize="words"
@@ -172,12 +165,7 @@ export function AgendamentoForm({
         placeholder="(69) 99999-9999"
         inputMode="tel"
         value={campos.numero}
-        onChange={(e) =>
-          atualizar(
-            'numero',
-            mascararTelefone(e.target.value),
-          )
-        }
+        onChange={(e) => atualizar('numero', mascararTelefone(e.target.value))}
         error={erros.numero}
         autoComplete="tel"
       />
@@ -186,18 +174,14 @@ export function AgendamentoForm({
         <DateField
           label="Data"
           value={campos.data}
-          onChange={(e) =>
-            atualizar('data', e.target.value)
-          }
+          onChange={(e) => atualizar('data', e.target.value)}
           error={erros.data}
         />
 
         <TimeField
           label="Horário"
           value={campos.horario}
-          onChange={(e) =>
-            atualizar('horario', e.target.value)
-          }
+          onChange={(e) => atualizar('horario', e.target.value)}
           error={erros.horario}
         />
       </Row>
@@ -206,7 +190,7 @@ export function AgendamentoForm({
         value={String(campos.status?.id ?? '')}
         onChange={(e) => {
           const statusSelecionado = status.find(
-            (item) => String(item.id) === e.target.value
+            (item) => String(item.id) === e.target.value,
           );
 
           atualizar('status', statusSelecionado ?? null);
@@ -227,11 +211,7 @@ export function AgendamentoForm({
         ]}
       />
       <Actions>
-        <Button
-          type="submit"
-          size="lg"
-          loading={enviando}
-        >
+        <Button type="submit" size="lg" loading={enviando}>
           {submitLabel}
         </Button>
 

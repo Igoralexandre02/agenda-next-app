@@ -21,7 +21,8 @@ export default function EditarAgendamentoPage({
   const { documentId } = use(params);
   const router = useRouter();
   const toast = useToast();
-  const { agendamento, loading, error, recarregar } = useAgendamento(documentId);
+  const { agendamento, loading, error, recarregar } =
+    useAgendamento(documentId);
 
   async function salvar(data: Agendamento) {
     await editarAgendamento(data);
@@ -50,6 +51,7 @@ export default function EditarAgendamentoPage({
         {!loading && agendamento && (
           <AgendamentoForm
             initialValue={{
+              documentId: agendamento.documentId,
               nome: agendamento.nome,
               numero: agendamento.numero,
               data: agendamento.data,

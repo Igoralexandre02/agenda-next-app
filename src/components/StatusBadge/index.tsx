@@ -74,16 +74,11 @@ export function StatusBadge({
   const chaveStatus = normalizarStatus(status);
 
   const statusValido = (
-    chaveStatus in paleta
-      ? chaveStatus
-      : 'agendado'
+    chaveStatus in paleta ? chaveStatus : 'agendado'
   ) as ChaveStatus;
 
   return (
-    <Badge
-      $status={statusValido}
-      $size={size}
-    >
+    <Badge $status={statusValido} $size={size}>
       {status}
     </Badge>
   );

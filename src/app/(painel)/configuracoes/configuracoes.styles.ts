@@ -79,3 +79,40 @@ export const Rodape = styled.p`
   font-size: ${({ theme }) => theme.typography.size.xs};
   color: ${({ theme }) => theme.colors.textSubtle};
 `;
+
+export const ContaConteudo = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: ${({ theme }) => theme.spacing.lg};
+
+  @media (max-width: 640px) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+`;
+
+export const ContaInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.xs};
+  min-width: 0;
+`;
+
+export const ContaDescricao = styled.span`
+  font-size: ${({ theme }) => theme.typography.size.sm};
+  line-height: ${({ theme }) => theme.typography.lineHeight.relaxed};
+  color: ${({ theme }) => theme.colors.textMuted};
+`;
+
+export const ContaAcao = styled.div`
+  flex-shrink: 0;
+
+  @media (max-width: 640px) {
+    width: 100%;
+
+    button {
+      width: 100%;
+    }
+  }
+`;

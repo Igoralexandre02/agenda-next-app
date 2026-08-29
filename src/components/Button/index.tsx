@@ -14,7 +14,6 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   size?: ButtonSize;
   fullWidth?: boolean;
   loading?: boolean;
-  /** Ícone opcional à esquerda do texto. */
   leftIcon?: React.ReactNode;
 }
 

@@ -8,7 +8,14 @@ import {
   nomeDiaSemana,
   rotuloRelativo,
 } from '@/src/utils/date';
-import { Grupo, GrupoHeader, GrupoInfo, GrupoTitulo, Lista, Wrapper } from './styles';
+import {
+  Grupo,
+  GrupoHeader,
+  GrupoInfo,
+  GrupoTitulo,
+  Lista,
+  Wrapper,
+} from './styles';
 
 export interface AgendamentosPorDataProps {
   agendamentos: Agendamento[];

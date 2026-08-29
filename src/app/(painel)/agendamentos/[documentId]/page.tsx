@@ -35,10 +35,10 @@ export default function DetalhesAgendamentoPage({
 }: {
   params: Promise<{ documentId: string }>;
 }) {
-  
   const { documentId } = use(params);
   const router = useRouter();
-  const { agendamento, loading, error, recarregar } = useAgendamento(documentId);
+  const { agendamento, loading, error, recarregar } =
+    useAgendamento(documentId);
   return (
     <>
       <Header title="Agendamento" showBack backHref="/agendamentos" />
@@ -86,7 +86,7 @@ export default function DetalhesAgendamentoPage({
               <Linha>
                 <Rotulo>Status</Rotulo>
                 <div>
-                    <StatusBadge status={agendamento.status?.nome} size="sm" />
+                  <StatusBadge status={agendamento.status?.nome} size="sm" />
                 </div>
               </Linha>
             </Cartao>

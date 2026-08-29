@@ -6,7 +6,7 @@
  * (`src/services/agendamentos.service.ts`).
  */
 
-import { Status } from "./status";
+import { Status } from './status';
 
 export interface Agendamento {
   id?: number;

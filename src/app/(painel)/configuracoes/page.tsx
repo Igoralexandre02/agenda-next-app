@@ -14,6 +14,10 @@ import { USE_MOCK } from '@/src/services/config';
 import type { ThemePreference } from '@/src/styles/themes';
 
 import {
+  ContaAcao,
+  ContaConteudo,
+  ContaDescricao,
+  ContaInfo,
   Grupo,
   GrupoTitulo,
   Info,
@@ -90,10 +94,20 @@ export default function ConfiguracoesPage() {
         )}
 
         <Grupo>
-          <GrupoTitulo>Conta</GrupoTitulo>
-          <Button variant="ghost" onClick={sair}>
-            Sair
-          </Button>
+          <ContaConteudo>
+            <ContaInfo>
+              <GrupoTitulo>Sua conta</GrupoTitulo>
+              <ContaDescricao>
+                Encerre sua sessão neste dispositivo.
+              </ContaDescricao>
+            </ContaInfo>
+
+            <ContaAcao>
+              <Button variant="ghost" onClick={sair}>
+                Sair
+              </Button>
+            </ContaAcao>
+          </ContaConteudo>
         </Grupo>
 
         <Rodape>Barbearia · Painel de agendamentos</Rodape>

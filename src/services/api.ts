@@ -1,45 +1,42 @@
-import { obterToken } from "../lib/auth";
+import { obterToken } from '../lib/auth';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 async function refreshAccessToken() {
   const response = await fetch(`${API_URL}/api/auth/refresh`, {
-    method: "POST",
-    credentials: "include",
+    method: 'POST',
+    credentials: 'include',
   });
 
   if (!response.ok) {
-    localStorage.removeItem("token");
-    throw new Error("Sessão expirada");
+    localStorage.removeItem('token');
+    throw new Error('Sessão expirada');
   }
 
   const data = await response.json();
 
-  localStorage.setItem("token", data.jwt);
+  localStorage.setItem('token', data.jwt);
 
   return data.jwt;
 }
 
-export async function apiFetch(
-  endpoint: string,
-  options: RequestInit = {},
-) {
+export async function apiFetch(endpoint: string, options: RequestInit = {}) {
   let token = obterToken();
 
   const makeRequest = (accessToken: string | null) => {
     const headers = new Headers(options.headers);
 
-    headers.set("Content-Type", "application/json");
+    headers.set('Content-Type', 'application/json');
 
     if (accessToken) {
-      headers.set("Authorization", `Bearer ${accessToken}`);
+      headers.set('Authorization', `Bearer ${accessToken}`);
     } else {
-      headers.delete("Authorization");
+      headers.delete('Authorization');
     }
 
     return fetch(`${API_URL}${endpoint}`, {
       ...options,
-      credentials: "include",
+      credentials: 'include',
       headers,
     });
   };

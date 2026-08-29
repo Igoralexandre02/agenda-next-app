@@ -26,8 +26,6 @@ const PERIODOS: PeriodoFiltro[] = [
   'personalizado',
 ];
 
-
-
 export interface FiltrosSheetProps {
   open: boolean;
   onClose: () => void;
@@ -41,7 +39,7 @@ export function FiltrosSheet({
   filtros,
   onApply,
 }: FiltrosSheetProps) {
-  const { status, loading: loadingStatus, error: erroStatus, } = useStatus();
+  const { status, loading: loadingStatus, error: erroStatus } = useStatus();
   const [rascunho, setRascunho] = useState<FiltrosAgendamento>(filtros);
 
   // Sincroniza o rascunho sempre que o sheet abre.
@@ -128,7 +126,7 @@ export function FiltrosSheet({
           }
         />
       </Grupo>
-      
+
       <Input
         label="Buscar"
         placeholder="Nome do cliente ou telefone"

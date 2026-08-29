@@ -9,21 +9,40 @@ function formatarHorario(horario: string) {
   return horario;
 }
 
-export async function getAgendamentos() {
-  const response = await apiFetch(`/api/agendamentos?populate=*`);
+function mapAgendamento(data: any): Agendamento {
+  return {
+    id: data.id,
+    documentId: data.documentId,
+    nome: data.nome,
+    numero: data.numero,
+    data: data.data,
+    horario: data.horario,
+    status: data.status_id ?? null,
+  };
+}
+
+export async function getAgendamentos(): Promise<Agendamento[]> {
+  const response = await apiFetch('/api/agendamentos?populate=*');
+
   if (!response.ok) {
     throw new Error('Erro ao buscar agendamentos');
   }
 
-  return response.json();
+  const json = await response.json();
+
+  return json.data.map(mapAgendamento);
 }
 
-export async function getAgendamentoById(documentId: string) {
+export async function getAgendamentoById(
+  documentId: string,
+): Promise<Agendamento> {
   if (!documentId) {
-    console.error("ID do agendamento não informado");
-    return;
+    throw new Error('ID do agendamento não informado');
   }
-  const response = await apiFetch(`/api/agendamentos/${documentId}?populate=*`);
+
+  const response = await apiFetch(
+    `/api/agendamentos/${documentId}?populate=*`,
+  );
 
   if (!response.ok) {
     throw new Error('Erro ao buscar agendamento');
@@ -31,7 +50,7 @@ export async function getAgendamentoById(documentId: string) {
 
   const json = await response.json();
 
-  return json.data;
+  return mapAgendamento(json.data);
 }
 
 export async function editarAgendamento(agendamento: Agendamento) {
@@ -47,13 +66,16 @@ export async function editarAgendamento(agendamento: Agendamento) {
       status_id: agendamento.status?.id,
     },
   };
-  const response = await apiFetch(`/api/agendamentos/${agendamento?.documentId}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
+  const response = await apiFetch(
+    `/api/agendamentos/${agendamento?.documentId}`,
+    {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
     },
-    body: JSON.stringify(payload),
-  });
+  );
 
   if (!response.ok) {
     throw new Error('Erro ao editar agendamento');
@@ -80,34 +102,31 @@ export async function criarAgendamento(agendamento: Agendamento) {
     body: JSON.stringify(payload),
   });
 
-  const result = await response.json();
+  const json = await response.json();
 
+  
   if (!response.ok) {
-    throw new Error(
-      result?.error?.message || 'Erro ao criar agendamento'
-    );
+    throw new Error(json?.error?.message || 'Erro ao criar agendamento');
   }
-
-  return result;
+  
+  return mapAgendamento(json.data);
 }
 
 export async function alterarStatusAgendamento(
   documentId: string,
   statusId: number,
 ) {
-  const response = await apiFetch(`/api/agendamentos/${documentId}`,
-    {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        data: {
-          statusId,
-        },
-      }),
+  const response = await apiFetch(`/api/agendamentos/${documentId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
     },
-  );
+    body: JSON.stringify({
+      data: {
+        statusId,
+      },
+    }),
+  });
 
   if (!response.ok) {
     throw new Error('Erro ao alterar status do agendamento');
@@ -133,4 +152,3 @@ export async function deletarAgendamento(documentId: string) {
 
   return response.json();
 }
-

@@ -13,7 +13,10 @@ import {
   XIcon,
 } from '@/src/components/icons';
 import { useToast } from '@/src/hooks/useToast';
-import { alterarStatusAgendamento, deletarAgendamento } from '@/src/services/agendamentos.service';
+import {
+  alterarStatusAgendamento,
+  deletarAgendamento,
+} from '@/src/services/agendamentos.service';
 import type { Agendamento } from '@/src/types/agendamento';
 
 const Grid = styled.div`
@@ -74,7 +77,9 @@ export function AcoesAgendamento({
         <Button
           variant="secondary"
           leftIcon={<PencilIcon width={18} height={18} />}
-          onClick={() => router.push(`/agendamentos/${agendamento.documentId}/editar`)}
+          onClick={() =>
+            router.push(`/agendamentos/${agendamento.documentId}/editar`)
+          }
         >
           Editar
         </Button>

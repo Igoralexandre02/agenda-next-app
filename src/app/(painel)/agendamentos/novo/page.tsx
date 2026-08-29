@@ -16,7 +16,7 @@ export default function NovoAgendamentoPage() {
   async function criar(data: Agendamento) {
     const criado = await criarAgendamento(data);
     toast.sucesso('Agendamento criado');
-    router.replace(`/agendamentos/${criado.id}`);
+    router.replace(`/agendamentos/${criado.documentId}`);
   }
 
   return (

@@ -39,7 +39,7 @@ export function useAgendamentos(
         const response = await getAgendamentos();
 
         if (ativo) {
-          setTodos(response.data);
+          setTodos(response);
         }
       } catch (err: unknown) {
         if (ativo) {
