@@ -10,23 +10,23 @@ import { Header } from '@/src/components/Header';
 import { Loading } from '@/src/components/Loading';
 import { useAgendamento } from '@/src/hooks/useAgendamento';
 import { useToast } from '@/src/hooks/useToast';
-import { agendamentosService } from '@/src/services/agendamentos.service';
-import type { AgendamentoInput } from '@/src/types/agendamento';
+import { editarAgendamento } from '@/src/services/agendamentos.service';
+import type { Agendamento } from '@/src/types/agendamento';
 
 export default function EditarAgendamentoPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ documentId: string }>;
 }) {
-  const { id } = use(params);
+  const { documentId } = use(params);
   const router = useRouter();
   const toast = useToast();
-  const { agendamento, loading, error, recarregar } = useAgendamento(id);
+  const { agendamento, loading, error, recarregar } = useAgendamento(documentId);
 
-  async function salvar(input: AgendamentoInput) {
-    await agendamentosService.atualizar(id, input);
+  async function salvar(data: Agendamento) {
+    await editarAgendamento(data);
     toast.sucesso('Agendamento atualizado');
-    router.replace(`/agendamentos/${id}`);
+    router.replace(`/agendamentos/${documentId}`);
   }
 
   return (
@@ -34,7 +34,7 @@ export default function EditarAgendamentoPage({
       <Header
         title="Editar agendamento"
         showBack
-        backHref={`/agendamentos/${id}`}
+        backHref={`/agendamentos/${documentId}`}
       />
       <PageBody>
         {loading && <Loading label="Carregando agendamento…" />}
@@ -51,14 +51,14 @@ export default function EditarAgendamentoPage({
           <AgendamentoForm
             initialValue={{
               nome: agendamento.nome,
-              telefone: agendamento.telefone,
+              numero: agendamento.numero,
               data: agendamento.data,
               horario: agendamento.horario,
               status: agendamento.status,
             }}
             submitLabel="Salvar alterações"
             onSubmit={salvar}
-            onCancel={() => router.push(`/agendamentos/${id}`)}
+            onCancel={() => router.push(`/agendamentos/${documentId}`)}
           />
         )}
       </PageBody>

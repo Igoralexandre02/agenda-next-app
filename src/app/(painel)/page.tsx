@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { AppointmentCard } from '@/src/components/AppointmentCard';
@@ -36,6 +36,7 @@ import {
   SectionTitle,
   VerTodos,
 } from './dashboard.styles';
+import { getMe } from '@/src/services/auth.service';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -47,11 +48,25 @@ export default function DashboardPage() {
     () => ordenarPorDataHora(todos.filter((a) => a.data === hoje)),
     [todos, hoje],
   );
+  const [nomeUsuario, setNomeUsuario] = useState('');
+
+  useEffect(() => {
+    async function carregarUsuario() {
+      try {
+        const user = await getMe();
+        setNomeUsuario(user.username);
+      } catch (error) {
+        console.error('Erro ao carregar usuário:', error);
+      }
+    }
+
+    carregarUsuario();
+  }, []);
   const resumo = useMemo(() => resumoDoDia(todos), [todos]);
   const proximo = useMemo(() => proximoAtendimento(todos), [todos]);
 
   function abrir(agendamento: Agendamento) {
-    router.push(`/agendamentos/${agendamento.id}`);
+    router.push(`/agendamentos/${agendamento.documentId}`);
   }
 
   return (
@@ -59,7 +74,7 @@ export default function DashboardPage() {
       <Header title="Início" />
       <Body>
         <Hero>
-          <Saudacao>Olá, Barbeiro 👋</Saudacao>
+          <Saudacao>Olá, {nomeUsuario || 'Barbeiro'} </Saudacao>
           <DataHoje>{formatarDataCurta(hoje)}</DataHoje>
           <DiaSemana>{nomeDiaSemana(hoje)}</DiaSemana>
         </Hero>

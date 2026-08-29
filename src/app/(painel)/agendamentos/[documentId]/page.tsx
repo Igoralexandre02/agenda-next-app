@@ -33,12 +33,12 @@ import {
 export default function DetalhesAgendamentoPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ documentId: string }>;
 }) {
-  const { id } = use(params);
+  
+  const { documentId } = use(params);
   const router = useRouter();
-  const { agendamento, loading, error, recarregar } = useAgendamento(id);
-
+  const { agendamento, loading, error, recarregar } = useAgendamento(documentId);
   return (
     <>
       <Header title="Agendamento" showBack backHref="/agendamentos" />
@@ -77,16 +77,16 @@ export default function DetalhesAgendamentoPage({
 
               <Linha>
                 <Rotulo>Telefone</Rotulo>
-                <LinkTelefone href={linkTelefone(agendamento.telefone)}>
+                <LinkTelefone href={linkTelefone(agendamento.numero)}>
                   <PhoneIcon />
-                  {agendamento.telefone}
+                  {agendamento.numero}
                 </LinkTelefone>
               </Linha>
 
               <Linha>
                 <Rotulo>Status</Rotulo>
                 <div>
-                  <StatusBadge status={agendamento.status} />
+                    <StatusBadge status={agendamento.status?.nome} size="sm" />
                 </div>
               </Linha>
             </Cartao>

@@ -13,7 +13,7 @@ import {
   XIcon,
 } from '@/src/components/icons';
 import { useToast } from '@/src/hooks/useToast';
-import { deletarAgendamento, editarAgendamento } from '@/src/services/agendamentos.service';
+import { alterarStatusAgendamento, deletarAgendamento } from '@/src/services/agendamentos.service';
 import type { Agendamento } from '@/src/types/agendamento';
 
 const Grid = styled.div`
@@ -45,24 +45,24 @@ export function AcoesAgendamento({
   const toast = useToast();
   const [confirmacao, setConfirmacao] = useState<Confirmacao>(null);
 
-  const encerrado = agendamento.status !== 'agendado';
+  const encerrado = agendamento.status?.nome !== 'agendado';
 
   async function finalizar() {
-    await editarAgendamento(agendamento.id, {EditarAgendamento: 'finalizado'});
+    await alterarStatusAgendamento(String(agendamento.documentId), 4);
     toast.sucesso('Atendimento finalizado');
     setConfirmacao(null);
     onChanged();
   }
 
   async function cancelar() {
-    await editarAgendamento(agendamento.id, 'cancelado');
+    await alterarStatusAgendamento(String(agendamento.documentId), 6);
     toast.info('Agendamento cancelado');
     setConfirmacao(null);
     onChanged();
   }
 
   async function excluir() {
-    await deletarAgendamento(agendamento.id);
+    await deletarAgendamento(String(agendamento.documentId));
     toast.sucesso('Agendamento excluído');
     setConfirmacao(null);
     onDeleted();
@@ -74,7 +74,7 @@ export function AcoesAgendamento({
         <Button
           variant="secondary"
           leftIcon={<PencilIcon width={18} height={18} />}
-          onClick={() => router.push(`/agendamentos/${agendamento.id}/editar`)}
+          onClick={() => router.push(`/agendamentos/${agendamento.documentId}/editar`)}
         >
           Editar
         </Button>
@@ -93,7 +93,7 @@ export function AcoesAgendamento({
             variant="secondary"
             fullWidth
             leftIcon={<XIcon width={18} height={18} />}
-            disabled={agendamento.status.nome === 'Cancelado'}
+            disabled={agendamento.status?.nome === 'Cancelado'}
             onClick={() => setConfirmacao('cancelar')}
           >
             Cancelar agendamento

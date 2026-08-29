@@ -1,4 +1,5 @@
 export interface Status {
   id?: number;
-  nome?: string;
+  documentId?: string
+  nome: string;
 }

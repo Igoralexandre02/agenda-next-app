@@ -4,17 +4,18 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 async function refreshAccessToken() {
   const response = await fetch(`${API_URL}/api/auth/refresh`, {
-    method: 'POST',
-    credentials: 'include',
+    method: "POST",
+    credentials: "include",
   });
 
   if (!response.ok) {
-    throw new Error('Sessão expirada');
+    localStorage.removeItem("token");
+    throw new Error("Sessão expirada");
   }
 
   const data = await response.json();
 
-  localStorage.setItem('token', data.jwt);
+  localStorage.setItem("token", data.jwt);
 
   return data.jwt;
 }
@@ -25,15 +26,25 @@ export async function apiFetch(
 ) {
   let token = obterToken();
 
-  let response = await fetch(`${API_URL}${endpoint}`, {
-    ...options,
-    credentials: 'include',
-    headers: {
-      ...options.headers,
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-  });
+  const makeRequest = (accessToken: string | null) => {
+    const headers = new Headers(options.headers);
+
+    headers.set("Content-Type", "application/json");
+
+    if (accessToken) {
+      headers.set("Authorization", `Bearer ${accessToken}`);
+    } else {
+      headers.delete("Authorization");
+    }
+
+    return fetch(`${API_URL}${endpoint}`, {
+      ...options,
+      credentials: "include",
+      headers,
+    });
+  };
+
+  let response = await makeRequest(token);
 
   if (response.status !== 401) {
     return response;
@@ -42,16 +53,8 @@ export async function apiFetch(
   // Access token expirou
   token = await refreshAccessToken();
 
-  // Tenta novamente a requisição
-  response = await fetch(`${API_URL}${endpoint}`, {
-    ...options,
-    credentials: 'include',
-    headers: {
-      ...options.headers,
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-  });
+  // Tenta novamente
+  response = await makeRequest(token);
 
   return response;
 }

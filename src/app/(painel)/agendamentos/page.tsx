@@ -51,7 +51,7 @@ export default function AgendamentosPage() {
   const filtrosAtivos = qtdBadge + (filtros.busca.trim() ? 1 : 0);
 
   function abrir(agendamento: Agendamento) {
-    router.push(`/agendamentos/${agendamento.id}`);
+    router.push(`/agendamentos/${agendamento.documentId}`);
   }
 
   const semResultados = !loading && !error && lista.length === 0;

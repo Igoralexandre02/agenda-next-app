@@ -8,14 +8,14 @@ import { DateField } from '@/src/components/DateField';
 import { Input } from '@/src/components/Input';
 import { SegmentedControl } from '@/src/components/SegmentedControl';
 import {
-  FILTROS_PADRAO,
   PERIODO_LABEL,
+  FILTROS_PADRAO,
   type FiltrosAgendamento,
   type PeriodoFiltro,
-  type StatusFiltro,
 } from '@/src/types/agendamento';
 
 import { Grupo, GrupoLabel, RangeRow } from './styles';
+import { useStatus } from '@/src/hooks/useStatus';
 
 const PERIODOS: PeriodoFiltro[] = [
   'hoje',
@@ -26,7 +26,7 @@ const PERIODOS: PeriodoFiltro[] = [
   'personalizado',
 ];
 
-const STATUS: StatusFiltro[] = ['todos', 'agendado', 'finalizado', 'cancelado'];
+
 
 export interface FiltrosSheetProps {
   open: boolean;
@@ -41,6 +41,7 @@ export function FiltrosSheet({
   filtros,
   onApply,
 }: FiltrosSheetProps) {
+  const { status, loading: loadingStatus, error: erroStatus, } = useStatus();
   const [rascunho, setRascunho] = useState<FiltrosAgendamento>(filtros);
 
   // Sincroniza o rascunho sempre que o sheet abre.
@@ -104,18 +105,30 @@ export function FiltrosSheet({
 
       <Grupo>
         <GrupoLabel>Status</GrupoLabel>
-        <SegmentedControl<StatusFiltro>
+
+        <SegmentedControl<string>
           ariaLabel="Status"
           wrap
-          options={STATUS.map((s) => ({
-            value: s,
-            label: s === 'todos' ? 'Todos' : STATUS_LABEL[s],
-          }))}
+          options={[
+            {
+              value: 'todos',
+              label: 'Todos',
+            },
+            ...status.map((s) => ({
+              value: String(s.id),
+              label: s.nome ?? '',
+            })),
+          ]}
           value={rascunho.status}
-          onChange={(status) => setRascunho((r) => ({ ...r, status }))}
+          onChange={(statusId) =>
+            setRascunho((r) => ({
+              ...r,
+              status: statusId,
+            }))
+          }
         />
       </Grupo>
-
+      
       <Input
         label="Buscar"
         placeholder="Nome do cliente ou telefone"

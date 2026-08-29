@@ -12,7 +12,7 @@ interface UseAgendamentoResult {
   recarregar: () => void;
 }
 
-export function useAgendamento(id: string): UseAgendamentoResult {
+export function useAgendamento(documentId: string): UseAgendamentoResult {
   const [agendamento, setAgendamento] = useState<Agendamento | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -25,7 +25,7 @@ export function useAgendamento(id: string): UseAgendamentoResult {
     setError(null);
     /* eslint-enable react-hooks/set-state-in-effect */
 
-    getAgendamentoById(id)
+    getAgendamentoById(documentId)
       .then((item) => {
         if (ativo) setAgendamento(item);
       })
@@ -45,7 +45,7 @@ export function useAgendamento(id: string): UseAgendamentoResult {
     return () => {
       ativo = false;
     };
-  }, [id, versao]);
+  }, [documentId, versao]);
 
   const recarregar = useCallback(() => setVersao((v) => v + 1), []);
 

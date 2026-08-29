@@ -7,14 +7,14 @@ import { PageBody } from '@/src/components/AppShell';
 import { Header } from '@/src/components/Header';
 import { useToast } from '@/src/hooks/useToast';
 import { criarAgendamento } from '@/src/services/agendamentos.service';
-import type { AgendamentoInput } from '@/src/types/agendamento';
+import type { Agendamento } from '@/src/types/agendamento';
 
 export default function NovoAgendamentoPage() {
   const router = useRouter();
   const toast = useToast();
 
-  async function criar(data: AgendamentoInput) {
-    const criado = await criarAgendamento({ CriarAgendamento: data });
+  async function criar(data: Agendamento) {
+    const criado = await criarAgendamento(data);
     toast.sucesso('Agendamento criado');
     router.replace(`/agendamentos/${criado.id}`);
   }

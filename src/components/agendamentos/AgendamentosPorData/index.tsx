@@ -1,7 +1,5 @@
 'use client';
 
-import styled from 'styled-components';
-
 import { AppointmentCard } from '@/src/components/AppointmentCard';
 import type { Agendamento } from '@/src/types/agendamento';
 import { agruparPorData } from '@/src/utils/agendamentos';
@@ -10,46 +8,7 @@ import {
   nomeDiaSemana,
   rotuloRelativo,
 } from '@/src/utils/date';
-
-const Grupo = styled.section`
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.spacing.md};
-`;
-
-const GrupoHeader = styled.div`
-  position: sticky;
-  top: ${({ theme }) => theme.layout.headerHeight};
-  z-index: ${({ theme }) => theme.zIndex.base};
-  display: flex;
-  align-items: baseline;
-  gap: ${({ theme }) => theme.spacing.sm};
-  padding: ${({ theme }) => theme.spacing.xs} 0;
-  background: ${({ theme }) => theme.colors.background};
-`;
-
-const GrupoTitulo = styled.h2`
-  font-size: ${({ theme }) => theme.typography.size.md};
-  font-weight: ${({ theme }) => theme.typography.weight.bold};
-  color: ${({ theme }) => theme.colors.text};
-`;
-
-const GrupoInfo = styled.span`
-  font-size: ${({ theme }) => theme.typography.size.xs};
-  color: ${({ theme }) => theme.colors.textSubtle};
-`;
-
-const Lista = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.spacing.md};
-`;
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.spacing.xl};
-`;
+import { Grupo, GrupoHeader, GrupoInfo, GrupoTitulo, Lista, Wrapper } from './styles';
 
 export interface AgendamentosPorDataProps {
   agendamentos: Agendamento[];

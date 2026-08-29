@@ -2,8 +2,6 @@
 
 import styled, { css } from 'styled-components';
 
-import { Status } from '@/src/types/status';
-
 type Size = 'sm' | 'md';
 
 const paleta = {
@@ -65,15 +63,15 @@ const Badge = styled.span<{
 `;
 
 export interface StatusBadgeProps {
-  status: Status;
+  status?: string;
   size?: Size;
 }
 
 export function StatusBadge({
-  status,
+  status = 'Agendado',
   size = 'md',
 }: StatusBadgeProps) {
-  const chaveStatus = normalizarStatus(status.nome ?? "");
+  const chaveStatus = normalizarStatus(status);
 
   const statusValido = (
     chaveStatus in paleta
@@ -86,7 +84,7 @@ export function StatusBadge({
       $status={statusValido}
       $size={size}
     >
-      {status.nome}
+      {status}
     </Badge>
   );
 }

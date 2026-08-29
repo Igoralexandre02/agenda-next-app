@@ -9,20 +9,10 @@
 import { Status } from "./status";
 
 export interface Agendamento {
-  id: string;
+  id?: number;
+  documentId?: string;
   nome: string;
-  telefone: string;
-  data: string;
-  horario: string;
-  status: Status | null;
-  created_at: string;
-  updated_at: string;
-}
-
-/** Dados aceitos ao criar ou editar um agendamento. */
-export interface AgendamentoInput {
-  nome: string;
-  telefone: string;
+  numero: string;
   data: string;
   horario: string;
   status: Status | null;
@@ -40,15 +30,13 @@ export const PERIODO_LABEL: Record<PeriodoFiltro, string> = {
   personalizado: 'Personalizado',
 };
 
-export type StatusFiltro = Status | 'todos';
+export type StatusFiltro = 'todos' | string;
 
 export interface FiltrosAgendamento {
+  status: StatusFiltro;
   periodo: PeriodoFiltro;
-  /** Usado quando `periodo === 'personalizado'`. Formato "YYYY-MM-DD". */
   dataInicio?: string;
   dataFim?: string;
-  status: StatusFiltro;
-  /** Busca por nome do cliente ou telefone. */
   busca: string;
 }
 

@@ -28,9 +28,20 @@ const MESES = [
   'Dezembro',
 ];
 
-/** Data local (sem hora) a partir de "YYYY-MM-DD". */
-export function parseISODate(iso: string): Date {
-  const [ano, mes, dia] = iso.split('-').map(Number);
+/** Converte uma data ISO para Date local. */
+export function parseISODate(iso: string | Date): Date {
+  if (iso instanceof Date) {
+    return iso;
+  }
+
+  if (typeof iso !== 'string') {
+    throw new TypeError(
+      `Data inválida: esperado string ou Date, recebido ${typeof iso}`
+    );
+  }
+
+  const [ano, mes, dia] = iso.split('T')[0].split('-').map(Number);
+
   return new Date(ano, (mes ?? 1) - 1, dia ?? 1);
 }
 

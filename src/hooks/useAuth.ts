@@ -22,7 +22,7 @@ export function useAuth() {
       }
 
       try {
-        const usuario = await getMe(token);
+        const usuario = await getMe();
         if (ativo) setUser(usuario);
       } catch {
         removerToken();

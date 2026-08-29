@@ -1,10 +1,16 @@
-import { AgendamentoInput } from '../types/agendamento';
+import { Agendamento } from '../types/agendamento';
+import { apiFetch } from './api';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+function formatarHorario(horario: string) {
+  if (horario.length === 5) {
+    return `${horario}:00.000`;
+  }
+
+  return horario;
+}
 
 export async function getAgendamentos() {
-  const response = await fetch(`${API_URL}/api/agendamentos`);
-
+  const response = await apiFetch(`/api/agendamentos?populate=*`);
   if (!response.ok) {
     throw new Error('Erro ao buscar agendamentos');
   }
@@ -12,30 +18,41 @@ export async function getAgendamentos() {
   return response.json();
 }
 
-export async function getAgendamentoById(id: string) {
-  const response = await fetch(`${API_URL}/api/agendamentos/${id}`);
+export async function getAgendamentoById(documentId: string) {
+  if (!documentId) {
+    console.error("ID do agendamento não informado");
+    return;
+  }
+  const response = await apiFetch(`/api/agendamentos/${documentId}?populate=*`);
 
   if (!response.ok) {
     throw new Error('Erro ao buscar agendamento');
   }
 
-  return response.json();
+  const json = await response.json();
+
+  return json.data;
 }
 
-export async function editarAgendamento(
-  id: string,
-  data: {
-    EditarAgendamento: AgendamentoInput;
-  },
-) {
-  const response = await fetch(`${API_URL}/api/agendamentos/${id}`, {
+export async function editarAgendamento(agendamento: Agendamento) {
+  if (!agendamento.documentId) {
+    throw new Error('ID do agendamento não informado');
+  }
+  const payload = {
+    data: {
+      nome: agendamento.nome,
+      numero: agendamento.numero,
+      data: agendamento.data,
+      horario: formatarHorario(agendamento.horario),
+      status_id: agendamento.status?.id,
+    },
+  };
+  const response = await apiFetch(`/api/agendamentos/${agendamento?.documentId}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      data,
-    }),
+    body: JSON.stringify(payload),
   });
 
   if (!response.ok) {
@@ -45,32 +62,40 @@ export async function editarAgendamento(
   return response.json();
 }
 
-export async function criarAgendamento(data: {
-  CriarAgendamento: AgendamentoInput;
-}) {
-  const response = await fetch(`${API_URL}/api/agendamentos`, {
+export async function criarAgendamento(agendamento: Agendamento) {
+  const payload = {
+    data: {
+      nome: agendamento.nome,
+      numero: agendamento.numero,
+      data: agendamento.data,
+      horario: `${agendamento.horario}:00.000`,
+      status_id: agendamento.status?.id,
+    },
+  };
+  const response = await apiFetch('/api/agendamentos', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      data,
-    }),
+    body: JSON.stringify(payload),
   });
 
+  const result = await response.json();
+
   if (!response.ok) {
-    throw new Error('Erro ao criar agendamento');
+    throw new Error(
+      result?.error?.message || 'Erro ao criar agendamento'
+    );
   }
 
-  return response.json();
+  return result;
 }
 
 export async function alterarStatusAgendamento(
-  id: string,
+  documentId: string,
   statusId: number,
 ) {
-  const response = await fetch(
-    `${API_URL}/api/agendamentos/${id}`,
+  const response = await apiFetch(`/api/agendamentos/${documentId}`,
     {
       method: 'PUT',
       headers: {
@@ -91,8 +116,11 @@ export async function alterarStatusAgendamento(
   return response.json();
 }
 
-export async function deletarAgendamento(id: string) {
-  const response = await fetch(`${API_URL}/api/agendamentos/${id}`, {
+export async function deletarAgendamento(documentId: string) {
+  if (!documentId) {
+    throw new Error('ID do agendamento não informado');
+  }
+  const response = await apiFetch(`/api/agendamentos/${documentId}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',

@@ -36,10 +36,10 @@ export function useAgendamentos(
         setLoading(true);
         setError(null);
 
-        const lista = await getAgendamentos();
+        const response = await getAgendamentos();
 
         if (ativo) {
-          setTodos(lista);
+          setTodos(response.data);
         }
       } catch (err: unknown) {
         if (ativo) {

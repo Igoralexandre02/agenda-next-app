@@ -7,7 +7,7 @@ import { DateField } from '@/src/components/DateField';
 import { Input } from '@/src/components/Input';
 import { Select } from '@/src/components/Select';
 import { TimeField } from '@/src/components/TimeField';
-import type { AgendamentoInput } from '@/src/types/agendamento';
+import type { Agendamento } from '@/src/types/agendamento';
 import { hojeISO } from '@/src/utils/date';
 import { mascararTelefone, telefoneValido } from '@/src/utils/phone';
 import { useStatus } from '@/src/hooks/useStatus';
@@ -15,8 +15,9 @@ import { Actions, Form, FormError, Row } from './styles';
 import { Status } from '@/src/types/status';
 
 interface CamposForm {
+  documentId?: string;
   nome: string;
-  telefone: string;
+  numero: string;
   data: string;
   horario: string;
   status: Status | null;
@@ -25,18 +26,19 @@ interface CamposForm {
 type Erros = Partial<Record<keyof CamposForm, string>>;
 
 export interface AgendamentoFormProps {
-  initialValue?: Partial<AgendamentoInput>;
+  initialValue?: Partial<Agendamento>;
   submitLabel: string;
-  onSubmit: (input: AgendamentoInput) => Promise<void> | void;
+  onSubmit: (input: Agendamento) => Promise<void> | void;
   onCancel?: () => void;
 }
 
 function valoresIniciais(
-  inicial?: Partial<AgendamentoInput>,
+  inicial?: Partial<Agendamento>,
 ): CamposForm {
   return {
+    documentId: inicial?.documentId,
     nome: inicial?.nome ?? '',
-    telefone: inicial?.telefone ?? '',
+    numero: inicial?.numero ?? '',
     data: inicial?.data ?? hojeISO(),
     horario: inicial?.horario ?? '',
     status: inicial?.status ?? null,
@@ -50,8 +52,8 @@ function validar(campos: CamposForm): Erros {
     erros.nome = 'Informe o nome do cliente';
   }
 
-  if (!telefoneValido(campos.telefone)) {
-    erros.telefone = 'Telefone inválido. Use DDD + número';
+  if (!telefoneValido(campos.numero)) {
+    erros.numero = 'Telefone inválido. Use DDD + número';
   }
 
   if (!campos.data) {
@@ -118,11 +120,14 @@ export function AgendamentoForm({
       setEnviando(true);
 
       await onSubmit({
+        ...(campos.documentId && {
+          documentId: campos.documentId,
+        }),
         nome: campos.nome.trim(),
-        telefone: campos.telefone.trim(),
+        numero: campos.numero.trim(),
         data: campos.data,
         horario: campos.horario,
-        status: campos.status,
+        status: campos.status
       });
     } catch (err) {
       setErroGeral(
@@ -166,14 +171,14 @@ export function AgendamentoForm({
         label="Telefone para contato"
         placeholder="(69) 99999-9999"
         inputMode="tel"
-        value={campos.telefone}
+        value={campos.numero}
         onChange={(e) =>
           atualizar(
-            'telefone',
+            'numero',
             mascararTelefone(e.target.value),
           )
         }
-        error={erros.telefone}
+        error={erros.numero}
         autoComplete="tel"
       />
 
@@ -198,13 +203,14 @@ export function AgendamentoForm({
       </Row>
       <Select
         label="Status"
-        value={String(campos.status?.id)}
-        onChange={(e) =>
-          atualizar(
-            'status',
-            e.target.value ?? '',
-          )
-        }
+        value={String(campos.status?.id ?? '')}
+        onChange={(e) => {
+          const statusSelecionado = status.find(
+            (item) => String(item.id) === e.target.value
+          );
+
+          atualizar('status', statusSelecionado ?? null);
+        }}
         disabled={loadingStatus}
         error={erros.status}
         options={[
