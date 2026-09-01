@@ -40,10 +40,7 @@ export function AppointmentCard({
         </Phone>
 
         <BadgeRow>
-          <StatusBadge
-            status={agendamento.status_id?.nome}
-            size="sm"
-          />
+          <StatusBadge status={agendamento.status_id?.nome} size="sm" />
         </BadgeRow>
       </Body>
     </Card>

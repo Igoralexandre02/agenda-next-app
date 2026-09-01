@@ -90,7 +90,6 @@ export default function ConfiguracoesPage() {
 
         <Rodape>Barbearia · Painel de agendamentos</Rodape>
       </PageBody>
-
     </>
   );
 }

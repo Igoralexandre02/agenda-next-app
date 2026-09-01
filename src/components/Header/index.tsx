@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 
 import { ChevronLeftIcon } from '@/src/components/icons';
+import { NotificacoesBell } from '@/src/components/Notificacoes';
 import { Bar, IconBtn, Slot, Subtitle, Title, TitleBox } from './styles';
 
 export interface HeaderProps {
@@ -14,6 +15,8 @@ export interface HeaderProps {
   backHref?: string;
   /** Conteúdo à direita (ex: botão de ação). */
   action?: React.ReactNode;
+  /** Oculta o sino de notificações (padrão: visível). */
+  hideNotificacoes?: boolean;
 }
 
 export function Header({
@@ -22,6 +25,7 @@ export function Header({
   showBack = false,
   backHref,
   action,
+  hideNotificacoes = false,
 }: HeaderProps) {
   const router = useRouter();
 
@@ -43,7 +47,10 @@ export function Header({
         <Title>{title}</Title>
         {subtitle && <Subtitle>{subtitle}</Subtitle>}
       </TitleBox>
-      <Slot>{action}</Slot>
+      <Slot>
+        {action}
+        {!hideNotificacoes && <NotificacoesBell />}
+      </Slot>
     </Bar>
   );
 }

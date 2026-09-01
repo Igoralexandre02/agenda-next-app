@@ -30,8 +30,6 @@ export async function getAgendamentos(): Promise<Agendamento[]> {
 
   const json = await response.json();
 
-  console.log('AGENDAMENTOS API:', json);
-
   return json.data.map(mapAgendamento);
 }
 
@@ -49,8 +47,6 @@ export async function getAgendamentoById(
   }
 
   const json = await response.json();
-
-  console.log('AGENDAMENTO API:', json);
 
   return mapAgendamento(json.data);
 }

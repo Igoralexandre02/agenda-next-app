@@ -135,3 +135,21 @@ export function PencilIcon(props: IconProps) {
     </svg>
   );
 }
+
+export function BellIcon(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6" />
+      <path d="M10.5 20a1.8 1.8 0 0 0 3 0" />
+    </svg>
+  );
+}
+
+export function WhatsAppIcon(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <path d="M4 20.5 5.5 16A8 8 0 1 1 8.5 19L4 20.5Z" />
+      <path d="M9 8.5c0 4 2.5 6.5 6.5 6.5.6 0 1.2-.5 1.2-1.2 0-.3-.1-.5-.3-.7l-1.3-1c-.3-.2-.7-.2-1 0l-.5.4c-1-.5-1.9-1.4-2.4-2.4l.4-.5c.2-.3.2-.7 0-1l-1-1.3a.9.9 0 0 0-.7-.3C9.5 7.3 9 7.9 9 8.5Z" />
+    </svg>
+  );
+}

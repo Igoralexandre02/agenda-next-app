@@ -19,6 +19,7 @@ export const Bar = styled.header`
 export const Slot = styled.div`
   display: flex;
   align-items: center;
+  gap: ${({ theme }) => theme.spacing.xs};
   flex-shrink: 0;
   min-width: 40px;
 
