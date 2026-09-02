@@ -10,13 +10,22 @@ import { TIPO_NOTIFICACAO_LABEL } from '@/src/types/notificacao';
 import { formatarDataCurta, formatarHorario, isHoje } from '@/src/utils/date';
 import { gerarLinkWhatsApp, gerarMensagemLembrete } from '@/src/utils/whatsapp';
 import {
+  ChevronIcon,
+  ConteudoCollapse,
+  ConteudoInterno,
+  Detalhe,
+  Detalhes,
   Item,
   ItemBotao,
   ItemTopo,
+  Label,
   LinhaInfo,
+  MensagemRemovido,
   Nome,
   PontoNaoLida,
   Tipo,
+  TipoWrapper,
+  Valor,
 } from './styles';
 
 interface NotificacaoItemProps {
@@ -31,6 +40,7 @@ export function NotificacaoItem({
 }: NotificacaoItemProps) {
   const toast = useToast();
   const [marcando, setMarcando] = useState(false);
+  const [aberto, setAberto] = useState(false);
 
   const { agendamento, lida, tipo } = notificacao;
 
@@ -46,6 +56,14 @@ export function NotificacaoItem({
       setMarcando(false);
     }
   }
+
+  const alternarCollapse = () => {
+    setAberto((valor) => !valor);
+
+    if (!lida) {
+      abrir();
+    }
+  };
 
   function enviarLembrete() {
     if (!agendamento) return;
@@ -70,43 +88,85 @@ export function NotificacaoItem({
     <Item $naoLida={!lida}>
       <ItemBotao
         type="button"
-        onClick={abrir}
-        aria-label={
-          lida
-            ? undefined
-            : `Marcar notificação de ${agendamento?.nome ?? 'agendamento'} como lida`
-        }
+        onClick={alternarCollapse}
+        aria-expanded={aberto}
       >
         <ItemTopo>
-          {!lida && <PontoNaoLida aria-hidden />}
-          <Tipo>{TIPO_NOTIFICACAO_LABEL[tipo]}</Tipo>
+          <TipoWrapper>
+            {!lida && <PontoNaoLida aria-hidden />}
+            <Tipo>{TIPO_NOTIFICACAO_LABEL[tipo]}</Tipo>
+          </TipoWrapper>
+
+          <ChevronIcon
+            width={18}
+            height={18}
+            $aberto={aberto}
+            aria-hidden
+          />
         </ItemTopo>
 
-        {agendamento ? (
-          <>
-            <Nome>{agendamento.nome}</Nome>
-            <LinhaInfo>
-              <ClockIcon width={16} height={16} />
-              {formatarHorario(agendamento.horario)}
-              {!isHoje(agendamento.data) &&
-                ` · ${formatarDataCurta(agendamento.data)}`}
-            </LinhaInfo>
-          </>
-        ) : (
-          <Nome>Agendamento removido</Nome>
+        <Nome>
+          {agendamento?.nome ?? 'Agendamento removido'}
+        </Nome>
+
+        {agendamento && (
+          <LinhaInfo>
+            <ClockIcon width={16} height={16} />
+
+            {formatarHorario(agendamento.horario)}
+
+            {!isHoje(agendamento.data) &&
+              ` · ${formatarDataCurta(agendamento.data)}`}
+          </LinhaInfo>
         )}
       </ItemBotao>
 
-      {agendamento && (
-        <Button
-          variant="secondary"
-          fullWidth
-          leftIcon={<WhatsAppIcon width={18} height={18} />}
-          onClick={enviarLembrete}
-        >
-          Enviar lembrete pelo WhatsApp
-        </Button>
-      )}
+      <ConteudoCollapse $aberto={aberto}>
+        <ConteudoInterno>
+          {agendamento ? (
+            <>
+              <Detalhes>
+                <Detalhe>
+                  <Label>Cliente</Label>
+                  <Valor>{agendamento.nome}</Valor>
+                </Detalhe>
+
+                <Detalhe>
+                  <Label>Horário</Label>
+                  <Valor>
+                    {formatarHorario(agendamento.horario)}
+                  </Valor>
+                </Detalhe>
+
+                <Detalhe>
+                  <Label>Data</Label>
+                  <Valor>
+                    {formatarDataCurta(agendamento.data)}
+                  </Valor>
+                </Detalhe>
+
+                <Detalhe>
+                  <Label>Telefone</Label>
+                  <Valor>{agendamento.numero}</Valor>
+                </Detalhe>
+              </Detalhes>
+
+              <Button
+                variant="secondary"
+                fullWidth
+                leftIcon={<WhatsAppIcon width={18} height={18} />}
+                onClick={enviarLembrete}
+              >
+                Enviar lembrete pelo WhatsApp
+              </Button>
+            </>
+          ) : (
+            <MensagemRemovido>
+              Este agendamento não está mais disponível.
+            </MensagemRemovido>
+          )}
+        </ConteudoInterno>
+      </ConteudoCollapse>
     </Item>
   );
 }

@@ -16,7 +16,7 @@ export type TipoNotificacao =
 
 /** Rótulo exibido para cada tipo de notificação. */
 export const TIPO_NOTIFICACAO_LABEL: Record<TipoNotificacao, string> = {
-  CORTE_PROXIMO: 'Corte próximo',
+  CORTE_PROXIMO: 'Próximo corte',
 };
 
 /* -------------------------------------------------------------------------- */
