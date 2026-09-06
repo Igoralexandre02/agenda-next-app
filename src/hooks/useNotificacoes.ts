@@ -13,28 +13,15 @@ import { hojeISO } from '@/src/utils/date';
 const INTERVALO_POLLING_MS = 60_000;
 
 interface UseNotificacoesResult {
-  /** Histórico do dia (lidas e não lidas), ordenado da mais recente para a mais antiga. */
   notificacoes: Notificacao[];
-  /** Subconjunto com `lida: false` — base do indicador do sino. */
   naoLidas: Notificacao[];
-  /** Quantidade de não lidas (contador do sino). */
   quantidadeNaoLidas: number;
   loading: boolean;
   error: string | null;
-  /** Recarrega manualmente (ex: botão "tentar novamente"). */
   recarregar: () => void;
-  /** Marca UMA notificação como lida no Strapi e reflete o retorno real. */
   marcarComoLida: (documentId: string) => Promise<void>;
 }
 
-/**
- * Fonte de verdade única das notificações na interface.
- *
- * - Carrega o histórico do dia atual do Strapi.
- * - Faz polling periódico (um único timer) para perceber notificações criadas
- *   pelo cron, pausando quando a aba não está visível.
- * - `marcarComoLida` persiste no backend e atualiza a lista com a resposta real.
- */
 export function useNotificacoes(): UseNotificacoesResult {
   const [notificacoes, setNotificacoes] = useState<Notificacao[]>([]);
   const [loading, setLoading] = useState(true);
@@ -52,8 +39,6 @@ export function useNotificacoes(): UseNotificacoesResult {
         }
 
         const dados = await getNotificacoesDoDia(hojeISO());
-
-        console.log('NOTIFICAÇÕES', dados);
 
         if (ativo) {
           setNotificacoes(dados);

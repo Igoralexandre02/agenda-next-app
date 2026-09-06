@@ -128,8 +128,8 @@ export function resumoDoDia(lista: Agendamento[]): ResumoDia {
   const doDia = lista.filter((a) => a.data === hoje);
   return {
     total: doDia.length,
-    agendados: doDia.filter((a) => a.status_id?.nome === 'agendado').length,
-    finalizados: doDia.filter((a) => a.status_id?.nome === 'finalizado').length,
-    cancelados: doDia.filter((a) => a.status_id?.nome === 'cancelado').length,
+    agendados: doDia.filter((a) => a.status_id?.nome === 'Agendado').length,
+    finalizados: doDia.filter((a) => a.status_id?.nome === 'Finalizado').length,
+    cancelados: doDia.filter((a) => a.status_id?.nome === 'Cancelado').length,
   };
 }

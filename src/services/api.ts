@@ -55,3 +55,13 @@ export async function apiFetch(endpoint: string, options: RequestInit = {}) {
 
   return response;
 }
+
+export async function apiGet<T>(endpoint: string): Promise<T> {
+  const response = await apiFetch(endpoint);
+
+  if (!response.ok) {
+    throw new Error('Erro ao buscar dados');
+  }
+
+  return response.json();
+}

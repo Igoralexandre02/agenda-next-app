@@ -30,7 +30,8 @@ export const PERIODO_LABEL: Record<PeriodoFiltro, string> = {
   personalizado: 'Personalizado',
 };
 
-export type StatusFiltro = 'todos' | string;
+export type StatusFiltro =
+  'todos' | 'agendado' | 'finalizado' | 'cancelado' | string;
 
 export interface FiltrosAgendamento {
   status: StatusFiltro;
@@ -41,7 +42,7 @@ export interface FiltrosAgendamento {
 }
 
 export const FILTROS_PADRAO: FiltrosAgendamento = {
-  periodo: 'hoje',
+  periodo: 'todos',
   status: 'todos',
   busca: '',
 };

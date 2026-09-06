@@ -17,7 +17,7 @@ export function useStatus() {
 
         const response = await getStatus();
 
-        setStatus(response.data);
+        setStatus(response);
       } catch (err) {
         setError(
           err instanceof Error

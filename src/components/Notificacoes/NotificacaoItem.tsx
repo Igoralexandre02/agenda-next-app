@@ -97,17 +97,10 @@ export function NotificacaoItem({
             <Tipo>{TIPO_NOTIFICACAO_LABEL[tipo]}</Tipo>
           </TipoWrapper>
 
-          <ChevronIcon
-            width={18}
-            height={18}
-            $aberto={aberto}
-            aria-hidden
-          />
+          <ChevronIcon width={18} height={18} $aberto={aberto} aria-hidden />
         </ItemTopo>
 
-        <Nome>
-          {agendamento?.nome ?? 'Agendamento removido'}
-        </Nome>
+        <Nome>{agendamento?.nome ?? 'Agendamento removido'}</Nome>
 
         {agendamento && (
           <LinhaInfo>
@@ -133,16 +126,12 @@ export function NotificacaoItem({
 
                 <Detalhe>
                   <Label>Horário</Label>
-                  <Valor>
-                    {formatarHorario(agendamento.horario)}
-                  </Valor>
+                  <Valor>{formatarHorario(agendamento.horario)}</Valor>
                 </Detalhe>
 
                 <Detalhe>
                   <Label>Data</Label>
-                  <Valor>
-                    {formatarDataCurta(agendamento.data)}
-                  </Valor>
+                  <Valor>{formatarDataCurta(agendamento.data)}</Valor>
                 </Detalhe>
 
                 <Detalhe>

@@ -1,24 +1,19 @@
 import { Status } from '../types/status';
-import { apiFetch } from './api';
+import { StrapiCollectionResponse, StrapiItemResponse } from '../types/strapi';
+import { apiFetch, apiGet } from './api';
 
-export async function getStatus() {
-  const response = await apiFetch(`/api/statuses`);
+export async function getStatus(): Promise<Status[]> {
+  const json = await apiGet<StrapiCollectionResponse<Status>>('/api/statuses');
 
-  if (!response.ok) {
-    throw new Error('Erro ao buscar status');
-  }
-
-  return response.json();
+  return json.data;
 }
 
-export async function getStatusById(documentId: string) {
-  const response = await apiFetch(`/api/statuses/${documentId}`);
+export async function getStatusById(documentId: string): Promise<Status> {
+  const json = await apiGet<StrapiItemResponse<Status>>(
+    `/api/statuses/${documentId}`,
+  );
 
-  if (!response.ok) {
-    throw new Error('Erro ao buscar status');
-  }
-
-  return response.json();
+  return json.data;
 }
 
 export async function editarStatus(data: { status: Status }) {

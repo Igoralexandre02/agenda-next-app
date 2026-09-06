@@ -131,9 +131,7 @@ export const ChevronIcon = styled(ChevronDownIcon)<{
 
   transition: transform 220ms ease;
 
-  transform: rotate(
-    ${({ $aberto }) => ($aberto ? '180deg' : '0deg')}
-  );
+  transform: rotate(${({ $aberto }) => ($aberto ? '180deg' : '0deg')});
 `;
 
 export const Nome = styled.strong`
@@ -156,8 +154,7 @@ export const ConteudoCollapse = styled.div<{
 }>`
   display: grid;
 
-  grid-template-rows: ${({ $aberto }) =>
-    $aberto ? '1fr' : '0fr'};
+  grid-template-rows: ${({ $aberto }) => ($aberto ? '1fr' : '0fr')};
 
   transition: grid-template-rows 220ms ease;
 

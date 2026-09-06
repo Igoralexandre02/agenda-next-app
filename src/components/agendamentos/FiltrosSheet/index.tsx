@@ -113,15 +113,15 @@ export function FiltrosSheet({
               label: 'Todos',
             },
             ...status.map((s) => ({
-              value: String(s.id),
+              value: s.nome ?? '',
               label: s.nome ?? '',
             })),
           ]}
           value={rascunho.status}
-          onChange={(statusId) =>
+          onChange={(status) =>
             setRascunho((r) => ({
               ...r,
-              status: statusId,
+              status,
             }))
           }
         />

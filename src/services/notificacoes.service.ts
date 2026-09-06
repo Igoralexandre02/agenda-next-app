@@ -1,27 +1,17 @@
-import type {
-  Notificacao,
-  NotificacaoDTO,
-  StrapiColecaoResponse,
-  StrapiItemResponse,
-} from '../types/notificacao';
+import type { Notificacao } from '../types/notificacao';
+import { StrapiCollectionResponse, StrapiItemResponse } from '../types/strapi';
 import { apiFetch } from './api';
-
-/**
- * Porta de entrada única para as notificações (mesmo padrão de
- * `agendamentos.service.ts` / `status.service.ts`): consome exclusivamente a
- * API real do Strapi via `apiFetch()` e traduz o DTO para o modelo de domínio.
- */
 
 /** Traz um lote generoso de uma vez — o volume diário é pequeno. */
 const PAGE_SIZE = 100;
 
-function mapNotificacao(dto: NotificacaoDTO): Notificacao {
+function mapNotificacao(dto: Notificacao): Notificacao {
   return {
     id: dto.id,
     documentId: dto.documentId,
     tipo: dto.tipo,
     lida: dto.lida,
-    criadaEm: dto.createdAt,
+    criadaEm: dto.criadaEm,
     agendamento: dto.agendamento
       ? {
           documentId: dto.agendamento.documentId,
@@ -29,16 +19,12 @@ function mapNotificacao(dto: NotificacaoDTO): Notificacao {
           numero: dto.agendamento.numero,
           data: dto.agendamento.data,
           horario: dto.agendamento.horario,
+          status_id: dto.agendamento.status_id ?? null,
         }
       : null,
   };
 }
 
-/**
- * Histórico do dia: todas as notificações cujo agendamento é do dia informado,
- * lidas ou não. É a lista base da interface — o contador de "não lidas" é
- * derivado dela no hook, evitando uma segunda requisição.
- */
 export async function getNotificacoesDoDia(
   dataISO: string,
 ): Promise<Notificacao[]> {
@@ -55,15 +41,11 @@ export async function getNotificacoesDoDia(
     throw new Error('Erro ao buscar notificações');
   }
 
-  const json: StrapiColecaoResponse<NotificacaoDTO> = await response.json();
+  const json: StrapiCollectionResponse<Notificacao> = await response.json();
 
   return json.data.map(mapNotificacao);
 }
 
-/**
- * Marca uma notificação específica como lida no Strapi e devolve o estado real
- * retornado pelo backend (com o agendamento repopulado).
- */
 export async function marcarNotificacaoComoLida(
   documentId: string,
 ): Promise<Notificacao> {
@@ -83,7 +65,7 @@ export async function marcarNotificacaoComoLida(
     throw new Error('Erro ao marcar notificação como lida');
   }
 
-  const json: StrapiItemResponse<NotificacaoDTO> = await response.json();
+  const json: StrapiItemResponse<Notificacao> = await response.json();
 
   return mapNotificacao(json.data);
 }

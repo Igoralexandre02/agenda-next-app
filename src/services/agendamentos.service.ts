@@ -1,5 +1,6 @@
 import { Agendamento } from '../types/agendamento';
-import { apiFetch } from './api';
+import { StrapiCollectionResponse, StrapiItemResponse } from '../types/strapi';
+import { apiFetch, apiGet } from './api';
 
 function formatarHorario(horario: string) {
   if (horario.length === 5) {
@@ -22,13 +23,9 @@ function mapAgendamento(data: Agendamento): Agendamento {
 }
 
 export async function getAgendamentos(): Promise<Agendamento[]> {
-  const response = await apiFetch('/api/agendamentos?populate=*');
-
-  if (!response.ok) {
-    throw new Error('Erro ao buscar agendamentos');
-  }
-
-  const json = await response.json();
+  const json = await apiGet<StrapiCollectionResponse<Agendamento>>(
+    '/api/agendamentos?populate=*',
+  );
 
   return json.data.map(mapAgendamento);
 }
@@ -36,17 +33,9 @@ export async function getAgendamentos(): Promise<Agendamento[]> {
 export async function getAgendamentoById(
   documentId: string,
 ): Promise<Agendamento> {
-  if (!documentId) {
-    throw new Error('ID do agendamento não informado');
-  }
-
-  const response = await apiFetch(`/api/agendamentos/${documentId}?populate=*`);
-
-  if (!response.ok) {
-    throw new Error('Erro ao buscar agendamento');
-  }
-
-  const json = await response.json();
+  const json = await apiGet<StrapiItemResponse<Agendamento>>(
+    `/api/agendamentos/${documentId}?populate=*`,
+  );
 
   return mapAgendamento(json.data);
 }
