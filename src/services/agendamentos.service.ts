@@ -100,7 +100,7 @@ export async function criarAgendamento(agendamento: Agendamento) {
 
 export async function alterarStatusAgendamento(
   documentId: string,
-  statusId: number,
+  statusId: number | undefined,
 ) {
   const response = await apiFetch(`/api/agendamentos/${documentId}`, {
     method: 'PUT',
@@ -109,7 +109,7 @@ export async function alterarStatusAgendamento(
     },
     body: JSON.stringify({
       data: {
-        statusId,
+        status_id: statusId,
       },
     }),
   });

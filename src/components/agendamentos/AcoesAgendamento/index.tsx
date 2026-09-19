@@ -12,6 +12,7 @@ import {
   TrashIcon,
   XIcon,
 } from '@/src/components/icons';
+import { useStatus } from '@/src/hooks/useStatus';
 import { useToast } from '@/src/hooks/useToast';
 import {
   alterarStatusAgendamento,
@@ -46,29 +47,61 @@ export function AcoesAgendamento({
 }: AcoesAgendamentoProps) {
   const router = useRouter();
   const toast = useToast();
+  const { status } = useStatus();
   const [confirmacao, setConfirmacao] = useState<Confirmacao>(null);
 
-  const encerrado = agendamento.status_id?.nome !== 'agendado';
+  const statusFinalizado = status.find(
+    (s) => s.nome?.toLowerCase() === 'finalizado',
+  );
+  const statusCancelado = status.find(
+    (s) => s.nome?.toLowerCase() === 'cancelado',
+  );
+
+  const encerrado = agendamento.status_id?.nome?.toLowerCase() !== 'agendado';
 
   async function finalizar() {
-    await alterarStatusAgendamento(String(agendamento.documentId), 4);
-    toast.sucesso('Atendimento finalizado');
-    setConfirmacao(null);
-    onChanged();
+    try {
+      await alterarStatusAgendamento(
+        String(agendamento.documentId),
+        statusFinalizado?.id,
+      );
+      toast.sucesso('Atendimento finalizado');
+      setConfirmacao(null);
+      onChanged();
+    } catch (err) {
+      toast.erro(
+        err instanceof Error ? err.message : 'Erro ao finalizar atendimento',
+      );
+    }
   }
 
   async function cancelar() {
-    await alterarStatusAgendamento(String(agendamento.documentId), 6);
-    toast.info('Agendamento cancelado');
-    setConfirmacao(null);
-    onChanged();
+    try {
+      await alterarStatusAgendamento(
+        String(agendamento.documentId),
+        statusCancelado?.id,
+      );
+      toast.info('Agendamento cancelado');
+      setConfirmacao(null);
+      onChanged();
+    } catch (err) {
+      toast.erro(
+        err instanceof Error ? err.message : 'Erro ao cancelar agendamento',
+      );
+    }
   }
 
   async function excluir() {
-    await deletarAgendamento(String(agendamento.documentId));
-    toast.sucesso('Agendamento excluído');
-    setConfirmacao(null);
-    onDeleted();
+    try {
+      await deletarAgendamento(String(agendamento.documentId));
+      toast.sucesso('Agendamento excluído');
+      setConfirmacao(null);
+      onDeleted();
+    } catch (err) {
+      toast.erro(
+        err instanceof Error ? err.message : 'Erro ao excluir agendamento',
+      );
+    }
   }
 
   return (
@@ -98,7 +131,9 @@ export function AcoesAgendamento({
             variant="secondary"
             fullWidth
             leftIcon={<XIcon width={18} height={18} />}
-            disabled={agendamento.status_id?.nome === 'Cancelado'}
+            disabled={
+              agendamento.status_id?.nome?.toLowerCase() === 'cancelado'
+            }
             onClick={() => setConfirmacao('cancelar')}
           >
             Cancelar agendamento
