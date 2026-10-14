@@ -11,6 +11,7 @@ import { ClockIcon, PhoneIcon } from '@/src/components/icons';
 import { Loading } from '@/src/components/Loading';
 import { StatusBadge } from '@/src/components/StatusBadge';
 import { useAgendamento } from '@/src/hooks/useAgendamento';
+import { mascararTelefone } from '@/src/utils/phone';
 import {
   formatarDataExtensa,
   formatarHorario,
@@ -57,7 +58,7 @@ export default function DetalhesAgendamentoPage({
           <>
             <Cartao>
               <Linha>
-                <Cliente>{agendamento.nome}</Cliente>
+                <Cliente>{agendamento.cliente_id?.nome}</Cliente>
               </Linha>
 
               <Linha>
@@ -77,9 +78,9 @@ export default function DetalhesAgendamentoPage({
 
               <Linha>
                 <Rotulo>Telefone</Rotulo>
-                <LinkTelefone href={linkTelefone(agendamento.numero)}>
+                <LinkTelefone href={linkTelefone(agendamento.cliente_id?.telefone ?? '')}>
                   <PhoneIcon />
-                  {agendamento.numero}
+                  {mascararTelefone(agendamento.cliente_id?.telefone ?? '')}
                 </LinkTelefone>
               </Linha>
 

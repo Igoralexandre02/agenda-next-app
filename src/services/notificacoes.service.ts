@@ -15,11 +15,10 @@ function mapNotificacao(dto: Notificacao): Notificacao {
     agendamento: dto.agendamento
       ? {
           documentId: dto.agendamento.documentId,
-          nome: dto.agendamento.nome,
-          numero: dto.agendamento.numero,
           data: dto.agendamento.data,
           horario: dto.agendamento.horario,
           status_id: dto.agendamento.status_id ?? null,
+          cliente_id: dto.agendamento.cliente_id ?? null,
         }
       : null,
   };

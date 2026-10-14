@@ -1,26 +1,26 @@
 'use client';
 
 import { useState } from 'react';
-
 import { Button } from '@/src/components/Button';
 import { DateField } from '@/src/components/DateField';
-import { Input } from '@/src/components/Input';
 import { Select } from '@/src/components/Select';
 import { TimeField } from '@/src/components/TimeField';
 import type { Agendamento } from '@/src/types/agendamento';
+import { mascararTelefone } from '@/src/utils/phone';
+import { Input } from '@/src/components/Input';
 import { hojeISO } from '@/src/utils/date';
-import { mascararTelefone, telefoneValido } from '@/src/utils/phone';
 import { useStatus } from '@/src/hooks/useStatus';
 import { Actions, Form, FormError, Row } from './styles';
 import { Status } from '@/src/types/status';
+import { Cliente } from '@/src/types/cliente';
+import { useClientes } from '@/src/hooks/useClientes';
 
 interface CamposForm {
   documentId?: string;
-  nome: string;
-  numero: string;
   data: string;
   horario: string;
   status_id: Status | null;
+  cliente_id: Cliente | null;
 }
 
 type Erros = Partial<Record<keyof CamposForm, string>>;
@@ -35,23 +35,18 @@ export interface AgendamentoFormProps {
 function valoresIniciais(inicial?: Partial<Agendamento>): CamposForm {
   return {
     documentId: inicial?.documentId ?? '',
-    nome: inicial?.nome ?? '',
-    numero: inicial?.numero ?? '',
     data: inicial?.data ?? hojeISO(),
     horario: inicial?.horario ?? '',
     status_id: inicial?.status_id ?? null,
+    cliente_id: inicial?.cliente_id ?? null,
   };
 }
 
 function validar(campos: CamposForm): Erros {
   const erros: Erros = {};
 
-  if (campos.nome.trim().length < 2) {
-    erros.nome = 'Informe o nome do cliente';
-  }
-
-  if (!telefoneValido(campos.numero)) {
-    erros.numero = 'Telefone inválido. Use DDD + número';
+  if (!campos.cliente_id) {
+    erros.cliente_id = 'Selecione um cliente';
   }
 
   if (!campos.data) {
@@ -76,6 +71,7 @@ export function AgendamentoForm({
   onCancel,
 }: AgendamentoFormProps) {
   const { status, loading: loadingStatus, error: erroStatus } = useStatus();
+  const { clientes, loading: loadingClientes, error: erroClientes } = useClientes();
 
   const [campos, setCampos] = useState<CamposForm>(() =>
     valoresIniciais(initialValue),
@@ -122,11 +118,10 @@ export function AgendamentoForm({
         ...(campos.documentId && {
           documentId: campos.documentId,
         }),
-        nome: campos.nome.trim(),
-        numero: campos.numero.trim(),
         data: campos.data,
         horario: campos.horario,
         status_id: campos.status_id,
+        cliente_id: campos.cliente_id ,
       });
     } catch (err) {
       setErroGeral(
@@ -144,27 +139,44 @@ export function AgendamentoForm({
       {erroGeral && <FormError role="alert">{erroGeral}</FormError>}
 
       {erroStatus && <FormError role="alert">{erroStatus}</FormError>}
+      {erroClientes && <FormError role="alert">{erroClientes}</FormError>}
 
-      <Input
-        label="Nome do cliente"
-        placeholder="Ex: João da Silva"
-        value={campos.nome}
-        onChange={(e) => atualizar('nome', e.target.value)}
-        error={erros.nome}
-        autoComplete="name"
-        autoCapitalize="words"
-        enterKeyHint="next"
-      />
+      <Row>
+        <Select
+          label="Cliente"
+          value={String(campos.cliente_id?.id ?? '')}
+          onChange={(e) => {
+            const clienteSelecionado = clientes.find(
+              (item) => String(item.id) === e.target.value,
+            );
+            
+            atualizar('cliente_id', clienteSelecionado ?? null);
+          }}
+          disabled={loadingClientes}
+          error={erros.cliente_id}
+          options={[
+            {
+              value: '',
+              label: loadingClientes
+                ? 'Carregando clientes...'
+                : 'Selecione o cliente',
+            },
+            ...clientes.map((item) => ({
+              value: String(item.id),
+              label: item.nome ?? '',
+            })),
+          ]}
+        />
 
-      <Input
-        label="Telefone para contato"
-        placeholder="(69) 99999-9999"
-        inputMode="tel"
-        value={campos.numero}
-        onChange={(e) => atualizar('numero', mascararTelefone(e.target.value))}
-        error={erros.numero}
-        autoComplete="tel"
-      />
+        <Input
+          label="Telefone para contato"
+          placeholder="(69) 99999-9999"
+          inputMode="tel"
+          value={mascararTelefone(campos.cliente_id?.telefone ?? '')}
+          disabled
+          autoComplete="tel"
+        />
+      </Row>
 
       <Row>
         <DateField
@@ -181,6 +193,7 @@ export function AgendamentoForm({
           error={erros.horario}
         />
       </Row>
+
       <Select
         label="Status"
         value={String(campos.status_id?.id ?? '')}

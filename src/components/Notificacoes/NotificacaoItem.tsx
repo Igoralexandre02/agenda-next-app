@@ -8,6 +8,7 @@ import { useToast } from '@/src/hooks/useToast';
 import type { Notificacao } from '@/src/types/notificacao';
 import { TIPO_NOTIFICACAO_LABEL } from '@/src/types/notificacao';
 import { formatarDataCurta, formatarHorario, isHoje } from '@/src/utils/date';
+import { mascararTelefone } from '@/src/utils/phone';
 import { gerarLinkWhatsApp, gerarMensagemLembrete } from '@/src/utils/whatsapp';
 import {
   ChevronIcon,
@@ -69,10 +70,13 @@ export function NotificacaoItem({
     if (!agendamento) return;
 
     const mensagem = gerarMensagemLembrete(
-      agendamento.nome,
+      agendamento.cliente_id?.nome ?? 'Cliente',
       agendamento.horario,
     );
-    const link = gerarLinkWhatsApp(agendamento.numero, mensagem);
+    const link = gerarLinkWhatsApp(
+      agendamento.cliente_id?.telefone ?? '',
+      mensagem,
+    );
 
     if (!link) {
       toast.erro('Número de telefone inválido para este agendamento');
@@ -100,7 +104,7 @@ export function NotificacaoItem({
           <ChevronIcon width={18} height={18} $aberto={aberto} aria-hidden />
         </ItemTopo>
 
-        <Nome>{agendamento?.nome ?? 'Agendamento removido'}</Nome>
+        <Nome>{agendamento?.cliente_id?.nome ?? 'Agendamento removido'}</Nome>
 
         {agendamento && (
           <LinhaInfo>
@@ -121,7 +125,7 @@ export function NotificacaoItem({
               <Detalhes>
                 <Detalhe>
                   <Label>Cliente</Label>
-                  <Valor>{agendamento.nome}</Valor>
+                  <Valor>{agendamento.cliente_id?.nome ?? '-'}</Valor>
                 </Detalhe>
 
                 <Detalhe>
@@ -136,7 +140,10 @@ export function NotificacaoItem({
 
                 <Detalhe>
                   <Label>Telefone</Label>
-                  <Valor>{agendamento.numero}</Valor>
+                  <Valor>
+                    {mascararTelefone(agendamento.cliente_id?.telefone ?? '') ||
+                      '-'}
+                  </Valor>
                 </Detalhe>
               </Detalhes>
 

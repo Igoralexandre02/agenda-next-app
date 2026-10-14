@@ -86,10 +86,12 @@ export function aplicarFiltros(
   if (termo) {
     const termoDigitos = apenasDigitos(termo);
     resultado = resultado.filter((a) => {
-      const nomeMatch = a.nome.toLowerCase().includes(termo);
+      const nomeMatch = Boolean(
+        a.cliente_id?.nome?.toLowerCase().includes(termo),
+      );
       const telMatch =
         termoDigitos.length > 0 &&
-        apenasDigitos(a.numero).includes(termoDigitos);
+        apenasDigitos(a.cliente_id?.telefone ?? '').includes(termoDigitos);
       return nomeMatch || telMatch;
     });
   }

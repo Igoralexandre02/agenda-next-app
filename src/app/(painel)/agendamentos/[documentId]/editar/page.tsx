@@ -52,8 +52,7 @@ export default function EditarAgendamentoPage({
           <AgendamentoForm
             initialValue={{
               documentId: agendamento.documentId,
-              nome: agendamento.nome,
-              numero: agendamento.numero,
+              cliente_id: agendamento.cliente_id,
               data: agendamento.data,
               horario: agendamento.horario,
               status_id: agendamento.status_id,

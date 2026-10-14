@@ -5,14 +5,15 @@ import { usePathname } from 'next/navigation';
 import {
   CalendarIcon,
   HomeIcon,
-  PlusIcon,
   SettingsIcon,
+  UsersIcon,
 } from '@/src/components/icons';
-import { HighlightItem, Item, Nav } from './styles';
+import { Item, Nav } from './styles';
 
 const ITENS = [
   { href: '/', label: 'Início', Icon: HomeIcon, exact: true },
   { href: '/agendamentos', label: 'Agendamentos', Icon: CalendarIcon },
+  { href: '/cliente', label: 'Clientes', Icon: UsersIcon },
   { href: '/configuracoes', label: 'Ajustes', Icon: SettingsIcon },
 ] as const;
 
@@ -46,20 +47,22 @@ export function BottomNavigation() {
         {ITENS[1].label}
       </Item>
 
-      <HighlightItem href="/agendamentos/novo" aria-label="Novo agendamento">
-        <span className="icon">
-          <PlusIcon />
-        </span>
-        Novo
-      </HighlightItem>
-
       <Item
         href={ITENS[2].href}
         $active={isAtivo(pathname, ITENS[2].href)}
         aria-current={isAtivo(pathname, ITENS[2].href) ? 'page' : undefined}
       >
-        <SettingsIcon />
+        <UsersIcon />
         {ITENS[2].label}
+      </Item>
+
+      <Item
+        href={ITENS[3].href}
+        $active={isAtivo(pathname, ITENS[3].href)}
+        aria-current={isAtivo(pathname, ITENS[3].href) ? 'page' : undefined}
+      >
+        <SettingsIcon />
+        {ITENS[3].label}
       </Item>
     </Nav>
   );

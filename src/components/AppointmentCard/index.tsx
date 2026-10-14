@@ -4,6 +4,7 @@ import { PhoneIcon } from '@/src/components/icons';
 import { StatusBadge } from '@/src/components/StatusBadge';
 import type { Agendamento } from '@/src/types/agendamento';
 import { formatarHorario } from '@/src/utils/date';
+import { mascararTelefone } from '@/src/utils/phone';
 
 import { BadgeRow, Body, Card, Name, Phone, Time, TimeColumn } from './styles';
 
@@ -16,12 +17,15 @@ export function AppointmentCard({
   agendamento,
   onClick,
 }: AppointmentCardProps) {
+  const nomeCliente = agendamento.cliente_id?.nome ?? 'Cliente não informado';
+  const telefoneCliente = mascararTelefone(agendamento.cliente_id?.telefone ?? '');
+
   return (
     <Card
       type="button"
       $status={agendamento.status_id}
       onClick={() => onClick?.(agendamento)}
-      aria-label={`Agendamento de ${agendamento.nome} às ${formatarHorario(
+      aria-label={`Agendamento de ${nomeCliente} às ${formatarHorario(
         agendamento.horario,
       )}, ${agendamento.status_id?.nome ?? 'Sem status'}`}
     >
@@ -32,12 +36,14 @@ export function AppointmentCard({
       </TimeColumn>
 
       <Body>
-        <Name>{agendamento.nome}</Name>
+        <Name>{nomeCliente}</Name>
 
-        <Phone>
-          <PhoneIcon />
-          {agendamento.numero}
-        </Phone>
+        {telefoneCliente && (
+          <Phone>
+            <PhoneIcon />
+            {telefoneCliente}
+          </Phone>
+        )}
 
         <BadgeRow>
           <StatusBadge status={agendamento.status_id?.nome} size="sm" />

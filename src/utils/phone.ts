@@ -13,17 +13,23 @@ export function mascararTelefone(valor: string): string {
 }
 
 /** Mantém apenas os dígitos do telefone. */
-export function apenasDigitos(valor: string): string {
-  return valor.replace(/\D/g, '');
+export function apenasDigitos(valor: string | null | undefined): string {
+  return (valor ?? '').replace(/\D/g, '');
 }
 
 /** Valida se o telefone tem 10 ou 11 dígitos (fixo ou celular com DDD). */
-export function telefoneValido(valor: string): boolean {
+export function telefoneValido(valor: string | null | undefined): boolean {
   const n = apenasDigitos(valor).length;
   return n === 10 || n === 11;
 }
 
 /** Link "tel:" a partir de um telefone mascarado. */
-export function linkTelefone(valor: string): string {
-  return `tel:+55${apenasDigitos(valor)}`;
+export function linkTelefone(valor: string | null | undefined): string {
+  const telefone = apenasDigitos(valor);
+
+  if (!telefone) {
+    return '';
+  }
+
+  return `https://wa.me/55${telefone}`;
 }

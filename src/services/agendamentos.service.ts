@@ -14,11 +14,10 @@ function mapAgendamento(data: Agendamento): Agendamento {
   return {
     id: data.id,
     documentId: data.documentId,
-    nome: data.nome,
-    numero: data.numero,
     data: data.data,
     horario: data.horario,
     status_id: data.status_id ?? null,
+    cliente_id: data.cliente_id ?? null,
   };
 }
 
@@ -46,11 +45,10 @@ export async function editarAgendamento(agendamento: Agendamento) {
   }
   const payload = {
     data: {
-      nome: agendamento.nome,
-      numero: agendamento.numero,
       data: agendamento.data,
       horario: formatarHorario(agendamento.horario),
       status_id: agendamento.status_id?.id,
+      cliente_id: agendamento.cliente_id?.id,
     },
   };
   const response = await apiFetch(
@@ -74,11 +72,10 @@ export async function editarAgendamento(agendamento: Agendamento) {
 export async function criarAgendamento(agendamento: Agendamento) {
   const payload = {
     data: {
-      nome: agendamento.nome,
-      numero: agendamento.numero,
       data: agendamento.data,
       horario: `${agendamento.horario}:00.000`,
       status_id: agendamento.status_id?.id,
+      cliente_id: agendamento.cliente_id?.id,
     },
   };
   const response = await apiFetch('/api/agendamentos', {

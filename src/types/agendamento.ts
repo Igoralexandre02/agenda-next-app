@@ -1,21 +1,13 @@
-/**
- * Modelo de domínio usado pela interface.
- *
- * É intencionalmente independente do formato do backend (Strapi). A tradução
- * entre este modelo e a API fica isolada na camada de serviço
- * (`src/services/agendamentos.service.ts`).
- */
-
+import { Cliente } from './cliente';
 import { Status } from './status';
 
 export interface Agendamento {
   id?: number;
   documentId?: string;
-  nome: string;
-  numero: string;
   data: string;
   horario: string;
   status_id: Status | null;
+  cliente_id: Cliente | null; 
 }
 
 export type PeriodoFiltro =

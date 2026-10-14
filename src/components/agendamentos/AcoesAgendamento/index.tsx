@@ -155,7 +155,7 @@ export function AcoesAgendamento({
       <ConfirmDialog
         open={confirmacao === 'finalizar'}
         title="Finalizar atendimento?"
-        description={`O atendimento de ${agendamento.nome} será marcado como finalizado.`}
+        description={`O atendimento de ${agendamento.cliente_id?.nome ?? 'este cliente'} será marcado como finalizado.`}
         confirmLabel="Finalizar"
         onConfirm={finalizar}
         onCancel={() => setConfirmacao(null)}
@@ -164,7 +164,7 @@ export function AcoesAgendamento({
       <ConfirmDialog
         open={confirmacao === 'cancelar'}
         title="Cancelar agendamento?"
-        description={`O agendamento de ${agendamento.nome} ficará com status "Cancelado" e permanece no histórico.`}
+        description={`O agendamento de ${agendamento.cliente_id?.nome ?? 'este cliente'} ficará com status "Cancelado" e permanece no histórico.`}
         confirmLabel="Cancelar agendamento"
         cancelLabel="Voltar"
         onConfirm={cancelar}
@@ -174,7 +174,7 @@ export function AcoesAgendamento({
       <ConfirmDialog
         open={confirmacao === 'excluir'}
         title="Excluir agendamento?"
-        description={`Esta ação remove permanentemente o agendamento de ${agendamento.nome}. Para manter o histórico, use "Cancelar" em vez de excluir.`}
+        description={`Esta ação remove permanentemente o agendamento de ${agendamento.cliente_id?.nome ?? 'este cliente'}. Para manter o histórico, use "Cancelar" em vez de excluir.`}
         confirmLabel="Excluir"
         cancelLabel="Voltar"
         destructive
