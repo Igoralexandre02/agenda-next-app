@@ -1,14 +1,26 @@
+
 import { Cliente } from '../types/cliente';
-import { StrapiCollectionResponse, StrapiItemResponse } from '../types/strapi';
-import { apiFetch, apiGet } from './api';
+import {
+  StrapiCollectionResponse,
+  StrapiItemResponse,
+} from '../types/strapi';
+import { apenasDigitos } from '../utils/phone';
+import { apiFetch, apiGet, obterMensagemErro } from './api';
 
 export async function getClientes(): Promise<Cliente[]> {
-  const json = await apiGet<StrapiCollectionResponse<Cliente>>('/api/clientes');
+  const json =
+    await apiGet<StrapiCollectionResponse<Cliente>>('/api/clientes');
 
   return json.data;
 }
 
-export async function getClienteById(documentId: string): Promise<Cliente> {
+export async function getClienteById(
+  documentId: string,
+): Promise<Cliente> {
+  if (!documentId) {
+    throw new Error('ID do cliente não informado');
+  }
+
   const json = await apiGet<StrapiItemResponse<Cliente>>(
     `/api/clientes/${documentId}`,
   );
@@ -16,7 +28,9 @@ export async function getClienteById(documentId: string): Promise<Cliente> {
   return json.data;
 }
 
-export async function editarCliente(cliente: Cliente) {
+export async function editarCliente(
+  cliente: Cliente,
+): Promise<StrapiItemResponse<Cliente>> {
   if (!cliente.documentId) {
     throw new Error('ID do cliente não informado');
   }
@@ -24,32 +38,37 @@ export async function editarCliente(cliente: Cliente) {
   const payload = {
     data: {
       nome: cliente.nome,
-      telefone: cliente.telefone,
+      telefone: apenasDigitos(cliente.telefone),
     },
   };
 
-  const response = await apiFetch(`/api/clientes/${cliente.documentId}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
+  const response = await apiFetch(
+    `/api/clientes/${cliente.documentId}`,
+    {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
     },
-    body: JSON.stringify(payload),
-  });
+  );
 
   if (!response.ok) {
-    throw new Error('Erro ao editar cliente');
+    throw new Error(
+      await obterMensagemErro(response, 'Erro ao editar cliente'),
+    );
   }
 
   return response.json();
 }
 
 export async function criarCliente(
-  cliente: Omit<Cliente, 'id' | 'documentId'> | Cliente,
-) {
+  cliente: Cliente,
+): Promise<StrapiItemResponse<Cliente>> {
   const payload = {
     data: {
       nome: cliente.nome,
-      telefone: cliente.telefone,
+      telefone: apenasDigitos(cliente.telefone),
     },
   };
 
@@ -62,27 +81,31 @@ export async function criarCliente(
   });
 
   if (!response.ok) {
-    throw new Error('Erro ao criar cliente');
+    throw new Error(
+      await obterMensagemErro(response, 'Erro ao criar cliente'),
+    );
   }
 
   return response.json();
 }
 
-export async function deletarCliente(documentId: string) {
+export async function deletarCliente(
+  documentId: string,
+): Promise<void> {
   if (!documentId) {
     throw new Error('ID do cliente não informado');
   }
 
-  const response = await apiFetch(`/api/clientes/${documentId}`, {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
+  const response = await apiFetch(
+    `/api/clientes/${documentId}`,
+    {
+      method: 'DELETE',
     },
-  });
+  );
 
   if (!response.ok) {
-    throw new Error('Erro ao deletar cliente');
+    throw new Error(
+      await obterMensagemErro(response, 'Erro ao excluir cliente'),
+    );
   }
-
-  return response.json();
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { getClientes } from '@/src/services/clientes.service';
 import { Cliente } from '../types/cliente';
@@ -9,32 +9,50 @@ export function useClientes() {
   const [clientes, setClientes] = useState<Cliente[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [versao, setVersao] = useState(0);
 
   useEffect(() => {
+    let ativo = true;
+
     async function carregarClientes() {
       try {
         setLoading(true);
+        setError('');
 
         const response = await getClientes();
 
-        setClientes(response);
+        if (ativo) {
+          setClientes(response);
+        }
       } catch (err) {
-        setError(
-          err instanceof Error
-            ? err.message
-            : 'Não foi possível carregar os clientes',
-        );
+        if (ativo) {
+          setError(
+            err instanceof Error
+              ? err.message
+              : 'Não foi possível carregar os clientes',
+          );
+        }
       } finally {
-        setLoading(false);
+        if (ativo) {
+          setLoading(false);
+        }
       }
     }
 
     carregarClientes();
-  }, []);
+
+    return () => {
+      ativo = false;
+    };
+  }, [versao]);
+
+  const recarregar = useCallback(() => setVersao((v) => v + 1), []);
 
   return {
     clientes,
     loading,
     error,
+    recarregar,
   };
 }
+

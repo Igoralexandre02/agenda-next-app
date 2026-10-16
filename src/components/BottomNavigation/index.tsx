@@ -13,7 +13,7 @@ import { Item, Nav } from './styles';
 const ITENS = [
   { href: '/', label: 'Início', Icon: HomeIcon, exact: true },
   { href: '/agendamentos', label: 'Agendamentos', Icon: CalendarIcon },
-  { href: '/cliente', label: 'Clientes', Icon: UsersIcon },
+  { href: '/clientes', label: 'Clientes', Icon: UsersIcon },
   { href: '/configuracoes', label: 'Ajustes', Icon: SettingsIcon },
 ] as const;
 

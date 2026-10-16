@@ -2,27 +2,33 @@ import { obterToken } from '../lib/auth';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-async function refreshAccessToken() {
-  const response = await fetch(`${API_URL}/api/auth/refresh`, {
-    method: 'POST',
-    credentials: 'include',
-  });
+export async function refreshAccessToken() {
+  try {
+    const response = await fetch(`${API_URL}/api/auth/refresh`, {
+      method: 'POST',
+      credentials: 'include',
+    });
 
-  if (!response.ok) {
-    localStorage.removeItem('token');
-    throw new Error('Sessão expirada');
+    if (!response.ok) {
+      throw new Error('Não foi possível renovar a sessão');
+    }
+
+    const data = await response.json();
+
+    if (!data.jwt) {
+      throw new Error('Token não retornado pelo servidor');
+    }
+
+    localStorage.setItem('token', data.jwt);
+
+    return data.jwt;
+  } catch (error) {
+    encerrarSessao();
+    throw error;
   }
-
-  const data = await response.json();
-
-  localStorage.setItem('token', data.jwt);
-
-  return data.jwt;
 }
 
-export async function apiFetch(endpoint: string, options: RequestInit = {}) {
-  let token = obterToken();
-
+export async function apiFetch(endpoint: string, options: RequestInit = {},) {
   const makeRequest = (accessToken: string | null) => {
     const headers = new Headers(options.headers);
 
@@ -41,17 +47,30 @@ export async function apiFetch(endpoint: string, options: RequestInit = {}) {
     });
   };
 
-  let response = await makeRequest(token);
+  let response = await makeRequest(obterToken());
 
   if (response.status !== 401) {
     return response;
   }
 
-  // Access token expirou
-  token = await refreshAccessToken();
+  // O token expirou: tenta renovar a sessão.
+  let novoToken: string;
 
-  // Tenta novamente
-  response = await makeRequest(token);
+  try {
+    novoToken = await refreshAccessToken();
+  } catch (error) {
+    // refreshAccessToken já encerra a sessão e redireciona.
+    throw error;
+  }
+
+  // Repete a requisição original com o novo token.
+  response = await makeRequest(novoToken);
+
+  // Se o token renovado também for rejeitado, encerra a sessão.
+  if (response.status === 401) {
+    encerrarSessao();
+    throw new Error('Sessão expirada. Faça login novamente.');
+  }
 
   return response;
 }
@@ -65,3 +84,30 @@ export async function apiGet<T>(endpoint: string): Promise<T> {
 
   return response.json();
 }
+
+export function encerrarSessao() {
+  localStorage.removeItem('token');
+
+  if (window.location.pathname !== '/login') {
+    window.location.replace('/login');
+  }
+}
+
+export async function obterMensagemErro(
+  response: Response,
+  mensagemPadrao: string,
+): Promise<string> {
+  const texto = await response.text();
+
+  if (!texto) {
+    return mensagemPadrao;
+  }
+
+  try {
+    const json = JSON.parse(texto);
+    return json?.error?.message ?? mensagemPadrao;
+  } catch {
+    return texto || mensagemPadrao;
+  }
+}
+
