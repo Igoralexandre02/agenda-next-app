@@ -58,7 +58,8 @@ function FormContent({ cliente, onClose, onSuccess }: FormContentProps) {
     if (!dados.telefone.trim()) {
       novosErros.telefone = 'O telefone é obrigatório';
     } else if (!telefoneValido(dados.telefone)) {
-      novosErros.telefone = 'Informe um telefone válido com DDD (10 ou 11 dígitos)';
+      novosErros.telefone =
+        'Informe um telefone válido com DDD (10 ou 11 dígitos)';
     }
 
     return novosErros;
@@ -201,4 +202,3 @@ export function ClienteModal({
     </Modal>
   );
 }
-

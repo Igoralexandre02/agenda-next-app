@@ -78,7 +78,9 @@ export default function DetalhesAgendamentoPage({
 
               <Linha>
                 <Rotulo>Telefone</Rotulo>
-                <LinkTelefone href={linkTelefone(agendamento.cliente_id?.telefone ?? '')}>
+                <LinkTelefone
+                  href={linkTelefone(agendamento.cliente_id?.telefone ?? '')}
+                >
                   <PhoneIcon />
                   {mascararTelefone(agendamento.cliente_id?.telefone ?? '')}
                 </LinkTelefone>

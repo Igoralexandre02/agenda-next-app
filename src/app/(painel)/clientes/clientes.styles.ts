@@ -162,5 +162,3 @@ export const ActionButton = styled.button<{ $danger?: boolean }>`
       $danger ? theme.colors.dangerText : theme.colors.borderStrong};
   }
 `;
-
-

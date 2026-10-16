@@ -1,22 +1,15 @@
-
 import { Cliente } from '../types/cliente';
-import {
-  StrapiCollectionResponse,
-  StrapiItemResponse,
-} from '../types/strapi';
+import { StrapiCollectionResponse, StrapiItemResponse } from '../types/strapi';
 import { apenasDigitos } from '../utils/phone';
 import { apiFetch, apiGet, obterMensagemErro } from './api';
 
 export async function getClientes(): Promise<Cliente[]> {
-  const json =
-    await apiGet<StrapiCollectionResponse<Cliente>>('/api/clientes');
+  const json = await apiGet<StrapiCollectionResponse<Cliente>>('/api/clientes');
 
   return json.data;
 }
 
-export async function getClienteById(
-  documentId: string,
-): Promise<Cliente> {
+export async function getClienteById(documentId: string): Promise<Cliente> {
   if (!documentId) {
     throw new Error('ID do cliente não informado');
   }
@@ -42,16 +35,13 @@ export async function editarCliente(
     },
   };
 
-  const response = await apiFetch(
-    `/api/clientes/${cliente.documentId}`,
-    {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
+  const response = await apiFetch(`/api/clientes/${cliente.documentId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
     },
-  );
+    body: JSON.stringify(payload),
+  });
 
   if (!response.ok) {
     throw new Error(
@@ -81,27 +71,20 @@ export async function criarCliente(
   });
 
   if (!response.ok) {
-    throw new Error(
-      await obterMensagemErro(response, 'Erro ao criar cliente'),
-    );
+    throw new Error(await obterMensagemErro(response, 'Erro ao criar cliente'));
   }
 
   return response.json();
 }
 
-export async function deletarCliente(
-  documentId: string,
-): Promise<void> {
+export async function deletarCliente(documentId: string): Promise<void> {
   if (!documentId) {
     throw new Error('ID do cliente não informado');
   }
 
-  const response = await apiFetch(
-    `/api/clientes/${documentId}`,
-    {
-      method: 'DELETE',
-    },
-  );
+  const response = await apiFetch(`/api/clientes/${documentId}`, {
+    method: 'DELETE',
+  });
 
   if (!response.ok) {
     throw new Error(

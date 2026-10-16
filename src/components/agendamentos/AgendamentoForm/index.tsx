@@ -71,7 +71,11 @@ export function AgendamentoForm({
   onCancel,
 }: AgendamentoFormProps) {
   const { status, loading: loadingStatus, error: erroStatus } = useStatus();
-  const { clientes, loading: loadingClientes, error: erroClientes } = useClientes();
+  const {
+    clientes,
+    loading: loadingClientes,
+    error: erroClientes,
+  } = useClientes();
 
   const [campos, setCampos] = useState<CamposForm>(() =>
     valoresIniciais(initialValue),
@@ -121,7 +125,7 @@ export function AgendamentoForm({
         data: campos.data,
         horario: campos.horario,
         status_id: campos.status_id,
-        cliente_id: campos.cliente_id ,
+        cliente_id: campos.cliente_id,
       });
     } catch (err) {
       setErroGeral(
@@ -149,7 +153,7 @@ export function AgendamentoForm({
             const clienteSelecionado = clientes.find(
               (item) => String(item.id) === e.target.value,
             );
-            
+
             atualizar('cliente_id', clienteSelecionado ?? null);
           }}
           disabled={loadingClientes}

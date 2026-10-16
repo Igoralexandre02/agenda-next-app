@@ -1,6 +1,5 @@
-'use client';
 
-import { useEffect, useState } from 'react';
+'use client';
 
 import { AppShell } from '@/src/components/AppShell';
 import { Loading } from '@/src/components/Loading';
@@ -11,18 +10,13 @@ export default function PainelLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [verificando, setVerificando] = useState(true);
+  const token = obterToken();
 
-  useEffect(() => {
-    if (!obterToken()) {
+  if (!token) {
+    if (typeof window !== 'undefined') {
       window.location.replace('/login');
-      return;
     }
 
-    setVerificando(false);
-  }, []);
-
-  if (verificando) {
     return <Loading label="Verificando credenciais…" />;
   }
 

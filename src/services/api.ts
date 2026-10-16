@@ -28,7 +28,7 @@ export async function refreshAccessToken() {
   }
 }
 
-export async function apiFetch(endpoint: string, options: RequestInit = {},) {
+export async function apiFetch(endpoint: string, options: RequestInit = {}) {
   const makeRequest = (accessToken: string | null) => {
     const headers = new Headers(options.headers);
 
@@ -110,4 +110,3 @@ export async function obterMensagemErro(
     return texto || mensagemPadrao;
   }
 }
-

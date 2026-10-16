@@ -46,10 +46,14 @@ export default function ClientesPage() {
 
   // Estado do modal de cadastro/edição
   const [modalAberto, setModalAberto] = useState(false);
-  const [clienteParaEdicao, setClienteParaEdicao] = useState<Cliente | null>(null);
+  const [clienteParaEdicao, setClienteParaEdicao] = useState<Cliente | null>(
+    null,
+  );
 
   // Estado do diálogo de confirmação de exclusão
-  const [clienteParaExcluir, setClienteParaExcluir] = useState<Cliente | null>(null);
+  const [clienteParaExcluir, setClienteParaExcluir] = useState<Cliente | null>(
+    null,
+  );
 
   // Filtragem de clientes por nome ou telefone
   const clientesFiltrados = useMemo(() => {
@@ -63,7 +67,8 @@ export default function ClientesPage() {
       const tel = c.telefone ?? '';
       const telefoneMatch =
         tel.toLowerCase().includes(termo) ||
-        (termoDigitos.length > 0 && tel.replace(/\D/g, '').includes(termoDigitos));
+        (termoDigitos.length > 0 &&
+          tel.replace(/\D/g, '').includes(termoDigitos));
       return Boolean(nomeMatch || telefoneMatch);
     });
   }, [clientes, busca]);
@@ -263,4 +268,3 @@ export default function ClientesPage() {
     </>
   );
 }
-

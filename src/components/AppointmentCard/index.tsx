@@ -18,7 +18,9 @@ export function AppointmentCard({
   onClick,
 }: AppointmentCardProps) {
   const nomeCliente = agendamento.cliente_id?.nome ?? 'Cliente não informado';
-  const telefoneCliente = mascararTelefone(agendamento.cliente_id?.telefone ?? '');
+  const telefoneCliente = mascararTelefone(
+    agendamento.cliente_id?.telefone ?? '',
+  );
 
   return (
     <Card

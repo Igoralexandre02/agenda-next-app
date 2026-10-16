@@ -24,4 +24,3 @@ export const Actions = styled.div`
     flex: 1;
   }
 `;
-
