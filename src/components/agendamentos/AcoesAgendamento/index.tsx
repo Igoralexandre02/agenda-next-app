@@ -118,7 +118,7 @@ export function AcoesAgendamento({
         </Button>
 
         <Button
-          variant="secondary"
+          variant={encerrado ? 'secondary' : 'accent'}
           leftIcon={<CheckIcon width={18} height={18} />}
           disabled={encerrado}
           onClick={() => setConfirmacao('finalizar')}

@@ -66,7 +66,7 @@ export function NotificacoesBell() {
 
         {!loading && !error && notificacoes.length === 0 && (
           <EmptyState
-            icon="🔔"
+            icon={<BellIcon />}
             title="Nenhuma notificação hoje"
             description="Você não possui novas notificações."
           />

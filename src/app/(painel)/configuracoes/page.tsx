@@ -5,6 +5,12 @@ import { useRouter } from 'next/navigation';
 import { PageBody } from '@/src/components/AppShell';
 import { Button } from '@/src/components/Button';
 import { Header } from '@/src/components/Header';
+import {
+  DeviceIcon,
+  LogOutIcon,
+  MoonIcon,
+  SunIcon,
+} from '@/src/components/icons';
 import { useTheme } from '@/src/hooks/useTheme';
 import { removerToken } from '@/src/lib/auth';
 import type { ThemePreference } from '@/src/styles/themes';
@@ -17,6 +23,7 @@ import {
   Grupo,
   GrupoTitulo,
   RadioDescricao,
+  RadioIcon,
   RadioLinha,
   RadioTexto,
   RadioTitulo,
@@ -24,17 +31,24 @@ import {
   Rodape,
 } from './configuracoes.styles';
 
-const OPCOES_TEMA: {
-  value: ThemePreference;
-  titulo: string;
-  descricao: string;
-}[] = [
-  { value: 'light', titulo: 'Claro', descricao: 'Tema claro sempre ativo' },
-  { value: 'dark', titulo: 'Escuro', descricao: 'Tema escuro sempre ativo' },
+const OPCOES_TEMA = [
   {
-    value: 'system',
+    value: 'light' as ThemePreference,
+    titulo: 'Claro',
+    descricao: 'Tema claro sempre ativo',
+    Icon: SunIcon,
+  },
+  {
+    value: 'dark' as ThemePreference,
+    titulo: 'Escuro',
+    descricao: 'Tema escuro sempre ativo',
+    Icon: MoonIcon,
+  },
+  {
+    value: 'system' as ThemePreference,
     titulo: 'Sistema',
     descricao: 'Segue a aparência do dispositivo',
+    Icon: DeviceIcon,
   },
 ];
 
@@ -54,18 +68,21 @@ export default function ConfiguracoesPage() {
         <Grupo>
           <GrupoTitulo>Aparência</GrupoTitulo>
           <Radios role="radiogroup" aria-label="Tema">
-            {OPCOES_TEMA.map((opcao) => (
-              <RadioLinha key={opcao.value} $ativo={preference === opcao.value}>
+            {OPCOES_TEMA.map(({ value, titulo, descricao, Icon }) => (
+              <RadioLinha key={value} $ativo={preference === value}>
                 <input
                   type="radio"
                   name="tema"
-                  value={opcao.value}
-                  checked={preference === opcao.value}
-                  onChange={() => setPreference(opcao.value)}
+                  value={value}
+                  checked={preference === value}
+                  onChange={() => setPreference(value)}
                 />
+                <RadioIcon $ativo={preference === value} aria-hidden>
+                  <Icon />
+                </RadioIcon>
                 <RadioTexto>
-                  <RadioTitulo>{opcao.titulo}</RadioTitulo>
-                  <RadioDescricao>{opcao.descricao}</RadioDescricao>
+                  <RadioTitulo>{titulo}</RadioTitulo>
+                  <RadioDescricao>{descricao}</RadioDescricao>
                 </RadioTexto>
               </RadioLinha>
             ))}
@@ -76,19 +93,23 @@ export default function ConfiguracoesPage() {
             <ContaInfo>
               <GrupoTitulo>Sua conta</GrupoTitulo>
               <ContaDescricao>
-                Encerre sua sessão neste dispositivo.
+                Encerre sua sessão neste dispositivo com segurança.
               </ContaDescricao>
             </ContaInfo>
 
             <ContaAcao>
-              <Button variant="ghost" onClick={sair}>
-                Sair
+              <Button
+                variant="secondary"
+                leftIcon={<LogOutIcon width={16} height={16} />}
+                onClick={sair}
+              >
+                Sair da conta
               </Button>
             </ContaAcao>
           </ContaConteudo>
         </Grupo>
 
-        <Rodape>Barbearia · Painel de agendamentos</Rodape>
+        <Rodape>Barbearia · Painel de Gestão e Agendamentos</Rodape>
       </PageBody>
     </>
   );

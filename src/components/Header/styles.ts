@@ -12,7 +12,12 @@ export const Bar = styled.header`
   padding-top: calc(
     ${({ theme }) => theme.spacing.sm} + env(safe-area-inset-top, 0px)
   );
-  background: ${({ theme }) => theme.colors.surface};
+  background: ${({ theme }) =>
+    theme.name === 'dark'
+      ? 'rgba(25, 28, 31, 0.88)'
+      : 'rgba(255, 255, 255, 0.88)'};
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
 `;
 
@@ -54,8 +59,21 @@ export const IconBtn = styled.button`
   height: 40px;
   border-radius: ${({ theme }) => theme.radius.full};
   color: ${({ theme }) => theme.colors.text};
+  touch-action: manipulation;
+  transition:
+    background-color 120ms ease,
+    transform 100ms ${({ theme }) => theme.easing.out};
 
   &:hover {
     background: ${({ theme }) => theme.colors.surfaceMuted};
+  }
+
+  &:active {
+    transform: scale(0.92);
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.colors.focusRing};
+    outline-offset: 2px;
   }
 `;

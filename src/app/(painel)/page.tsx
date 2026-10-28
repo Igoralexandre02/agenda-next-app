@@ -91,10 +91,12 @@ export default function DashboardPage() {
         <Resumo>
           <ResumoCard>
             <ResumoValor>{resumo.total}</ResumoValor>
-            <ResumoLabel>Hoje</ResumoLabel>
+            <ResumoLabel>Total hoje</ResumoLabel>
           </ResumoCard>
-          <ResumoCard>
-            <ResumoValor>{resumo.agendados}</ResumoValor>
+          <ResumoCard $accent={resumo.agendados > 0}>
+            <ResumoValor $accent={resumo.agendados > 0}>
+              {resumo.agendados}
+            </ResumoValor>
             <ResumoLabel>Agendados</ResumoLabel>
           </ResumoCard>
           <ResumoCard>
@@ -103,48 +105,48 @@ export default function DashboardPage() {
           </ResumoCard>
         </Resumo>
 
-        <section>
+        <section aria-labelledby="proximos-titulo">
           <SectionHead>
-            <SectionTitle>Próximos atendimentos</SectionTitle>
-            <VerTodos onClick={() => router.push('/agendamentos')}>
-              Ver todos
-            </VerTodos>
+            <SectionTitle id="proximos-titulo">
+              Próximos atendimentos
+            </SectionTitle>
+            <VerTodos href="/agendamentos">Ver todos</VerTodos>
           </SectionHead>
+
+          {loading && <AppointmentListSkeleton rows={3} />}
+
+          {!loading && error && (
+            <ErrorState description={error} onRetry={recarregar} />
+          )}
+
+          {!loading && !error && doDia.length === 0 && (
+            <EmptyState
+              title="Nenhum atendimento hoje"
+              description="Você ainda não possui agendamentos para hoje."
+              action={
+                <Button
+                  leftIcon={<PlusIcon width={18} height={18} />}
+                  onClick={() => router.push('/agendamentos/novo')}
+                >
+                  Novo agendamento
+                </Button>
+              }
+            />
+          )}
+
+          {!loading && !error && doDia.length > 0 && (
+            <Lista>
+              {doDia.map((item) => (
+                <ItemProximo key={item.id}>
+                  {proximo?.id === item.id && (
+                    <ProximoLabel>Próximo</ProximoLabel>
+                  )}
+                  <AppointmentCard agendamento={item} onClick={abrir} />
+                </ItemProximo>
+              ))}
+            </Lista>
+          )}
         </section>
-
-        {loading && <AppointmentListSkeleton rows={3} />}
-
-        {!loading && error && (
-          <ErrorState description={error} onRetry={recarregar} />
-        )}
-
-        {!loading && !error && doDia.length === 0 && (
-          <EmptyState
-            title="Nenhum atendimento hoje"
-            description="Você ainda não possui agendamentos para hoje."
-            action={
-              <Button
-                leftIcon={<PlusIcon width={18} height={18} />}
-                onClick={() => router.push('/agendamentos/novo')}
-              >
-                Novo agendamento
-              </Button>
-            }
-          />
-        )}
-
-        {!loading && !error && doDia.length > 0 && (
-          <Lista>
-            {doDia.map((item) => (
-              <ItemProximo key={item.id}>
-                {proximo?.id === item.id && (
-                  <ProximoLabel>● Próximo</ProximoLabel>
-                )}
-                <AppointmentCard agendamento={item} onClick={abrir} />
-              </ItemProximo>
-            ))}
-          </Lista>
-        )}
       </Body>
     </>
   );

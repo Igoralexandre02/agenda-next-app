@@ -1,7 +1,8 @@
 import styled, { css, keyframes } from 'styled-components';
 
-export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger';
-export type ButtonSize = 'md' | 'lg';
+export type ButtonVariant =
+  'primary' | 'secondary' | 'accent' | 'ghost' | 'danger';
+export type ButtonSize = 'sm' | 'md' | 'lg';
 
 const spin = keyframes`
   to { transform: rotate(360deg); }
@@ -25,6 +26,17 @@ const variants = {
 
     &:hover:not(:disabled) {
       background: ${({ theme }) => theme.colors.surfaceMuted};
+      border-color: ${({ theme }) => theme.colors.textSubtle};
+    }
+  `,
+  accent: css`
+    background: ${({ theme }) => theme.colors.accent};
+    color: ${({ theme }) => theme.colors.accentText};
+    border-color: ${({ theme }) => theme.colors.accent};
+
+    &:hover:not(:disabled) {
+      background: ${({ theme }) => theme.colors.accentHover};
+      border-color: ${({ theme }) => theme.colors.accentHover};
     }
   `,
   ghost: css`
@@ -50,15 +62,23 @@ const variants = {
 } as const;
 
 const sizes = {
+  sm: css`
+    min-height: 36px;
+    padding: 0 ${({ theme }) => theme.spacing.md};
+    font-size: ${({ theme }) => theme.typography.size.xs};
+    border-radius: ${({ theme }) => theme.radius.sm};
+  `,
   md: css`
     min-height: 44px;
     padding: 0 ${({ theme }) => theme.spacing.lg};
     font-size: ${({ theme }) => theme.typography.size.sm};
+    border-radius: ${({ theme }) => theme.radius.md};
   `,
   lg: css`
-    min-height: 52px;
+    min-height: 50px;
     padding: 0 ${({ theme }) => theme.spacing.xl};
     font-size: ${({ theme }) => theme.typography.size.md};
+    border-radius: ${({ theme }) => theme.radius.md};
   `,
 } as const;
 
@@ -73,24 +93,32 @@ export const StyledButton = styled.button<{
   gap: ${({ theme }) => theme.spacing.sm};
   width: ${({ $fullWidth }) => ($fullWidth ? '100%' : 'auto')};
   border: 1px solid transparent;
-  border-radius: ${({ theme }) => theme.radius.md};
   font-weight: ${({ theme }) => theme.typography.weight.semibold};
   line-height: 1;
   white-space: nowrap;
   cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
   transition:
-    background ${({ theme }) => theme.transition.fast},
-    border-color ${({ theme }) => theme.transition.fast},
-    opacity ${({ theme }) => theme.transition.fast},
-    transform ${({ theme }) => theme.transition.fast};
+    transform 100ms ${({ theme }) => theme.easing.out},
+    background 120ms ease,
+    border-color 120ms ease,
+    box-shadow 120ms ease,
+    opacity 120ms ease;
 
   &:active:not(:disabled) {
-    transform: scale(0.98);
+    transform: scale(0.97);
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.colors.focusRing};
+    outline-offset: 2px;
   }
 
   &:disabled {
-    opacity: 0.55;
+    opacity: 0.5;
     cursor: not-allowed;
+    transform: none;
   }
 
   ${({ $size }) => sizes[$size]}

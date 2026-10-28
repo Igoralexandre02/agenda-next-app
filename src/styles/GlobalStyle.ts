@@ -42,6 +42,11 @@ export const GlobalStyle = createGlobalStyle`
     letter-spacing: inherit;
   }
 
+  button,
+  a {
+    touch-action: manipulation;
+  }
+
   button {
     background: none;
     border: none;

@@ -9,6 +9,7 @@ export const darkTheme: AppTheme = {
     surface: '#191c1f',
     surfaceMuted: '#22262a',
     surfaceRaised: '#1f2327',
+    surfaceHover: '#23272c',
 
     border: '#2c3136',
     borderStrong: '#3d434a',
@@ -23,11 +24,13 @@ export const darkTheme: AppTheme = {
     primaryText: '#16191d',
 
     accent: '#d8a24a',
-    accentSoft: '#332a1c',
+    accentHover: '#edb558',
+    accentSoft: '#2d2417',
     accentText: '#16191d',
 
     focusRing: '#6aa2ff',
-    overlay: 'rgba(0, 0, 0, 0.62)',
+    focusRingAlpha: 'rgba(106, 162, 255, 0.28)',
+    overlay: 'rgba(0, 0, 0, 0.65)',
 
     statusAgendadoBg: '#1b2b41',
     statusAgendadoText: '#9dc3f7',
@@ -49,8 +52,8 @@ export const darkTheme: AppTheme = {
     infoText: '#9dc3f7',
   },
   shadows: {
-    sm: '0 1px 2px rgba(0, 0, 0, 0.4)',
-    md: '0 4px 16px rgba(0, 0, 0, 0.46)',
-    lg: '0 18px 44px rgba(0, 0, 0, 0.6)',
+    sm: '0 1px 2px rgba(0, 0, 0, 0.35)',
+    md: '0 4px 16px -2px rgba(0, 0, 0, 0.45), 0 2px 6px -1px rgba(0, 0, 0, 0.25)',
+    lg: '0 16px 40px -4px rgba(0, 0, 0, 0.65), 0 4px 16px -2px rgba(0, 0, 0, 0.35)',
   },
 };

@@ -15,6 +15,7 @@ import {
   PlusIcon,
   SearchIcon,
   TrashIcon,
+  UsersIcon,
   WhatsAppIcon,
 } from '@/src/components/icons';
 import { Skeleton } from '@/src/components/Skeleton';
@@ -166,7 +167,7 @@ export default function ClientesPage() {
 
         {semResultados && buscaVazia && (
           <EmptyState
-            icon="👥"
+            icon={<UsersIcon />}
             title="Nenhum cliente cadastrado"
             description="Você ainda não possui clientes cadastrados na sua base."
             action={
@@ -182,7 +183,7 @@ export default function ClientesPage() {
 
         {semResultados && !buscaVazia && (
           <EmptyState
-            icon="🔍"
+            icon={<SearchIcon />}
             title="Nada encontrado"
             description="Nenhum cliente corresponde ao termo buscado."
             action={

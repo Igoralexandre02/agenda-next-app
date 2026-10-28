@@ -4,7 +4,7 @@ import type { ToastTipo } from './ToastProvider';
 const entrar = keyframes`
   from {
     opacity: 0;
-    transform: translateY(12px) scale(0.98);
+    transform: translateY(16px) scale(0.96);
   }
   to {
     opacity: 1;
@@ -38,21 +38,29 @@ const cores = (tipo: ToastTipo) => css`
   ${({ theme }) => {
     const mapa = {
       success: {
-        bg: theme.colors.successBg,
-        fg: theme.colors.successText,
+        bg: theme.colors.surfaceRaised,
+        fg: theme.colors.text,
+        border: theme.colors.successSolid,
+        icon: theme.colors.successSolid,
       },
       error: {
-        bg: theme.colors.dangerBg,
-        fg: theme.colors.dangerText,
+        bg: theme.colors.surfaceRaised,
+        fg: theme.colors.text,
+        border: theme.colors.dangerSolid,
+        icon: theme.colors.dangerSolid,
       },
       info: {
-        bg: theme.colors.infoBg,
-        fg: theme.colors.infoText,
+        bg: theme.colors.surfaceRaised,
+        fg: theme.colors.text,
+        border: theme.colors.accent,
+        icon: theme.colors.accent,
       },
     } as const;
     return css`
       background: ${mapa[tipo].bg};
       color: ${mapa[tipo].fg};
+      border-left: 4px solid ${mapa[tipo].border};
+      --toast-icon-color: ${mapa[tipo].icon};
     `;
   }}
 `;
@@ -61,7 +69,7 @@ export const ToastItem = styled.div<{ $tipo: ToastTipo }>`
   pointer-events: auto;
   display: flex;
   align-items: center;
-  gap: ${({ theme }) => theme.spacing.sm};
+  gap: ${({ theme }) => theme.spacing.md};
   padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.lg};
   border-radius: ${({ theme }) => theme.radius.md};
   border: 1px solid ${({ theme }) => theme.colors.border};
@@ -69,7 +77,22 @@ export const ToastItem = styled.div<{ $tipo: ToastTipo }>`
   font-size: ${({ theme }) => theme.typography.size.sm};
   font-weight: ${({ theme }) => theme.typography.weight.medium};
   cursor: pointer;
-  animation: ${entrar} ${({ theme }) => theme.transition.base};
+  touch-action: manipulation;
+  user-select: none;
+  animation: ${entrar} 200ms ${({ theme }) => theme.easing.out};
+  transition:
+    transform 100ms ${({ theme }) => theme.easing.out},
+    opacity 150ms ease;
+
+  &:active {
+    transform: scale(0.97);
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.colors.focusRing};
+    outline-offset: 2px;
+  }
+
   ${({ $tipo }) => cores($tipo)}
 `;
 
@@ -77,20 +100,14 @@ export const ToastIcon = styled.span<{ $tipo: ToastTipo }>`
   flex-shrink: 0;
   display: grid;
   place-items: center;
-  width: 20px;
-  height: 20px;
-  border-radius: ${({ theme }) => theme.radius.full};
-  font-size: 12px;
-  font-weight: ${({ theme }) => theme.typography.weight.bold};
-  background: currentColor;
+  width: 22px;
+  height: 22px;
+  color: var(--toast-icon-color);
 
-  /* o glifo herda a cor de fundo do item para contraste */
-  color: ${({ theme, $tipo }) =>
-    $tipo === 'success'
-      ? theme.colors.successBg
-      : $tipo === 'error'
-        ? theme.colors.dangerBg
-        : theme.colors.infoBg};
+  svg {
+    width: 20px;
+    height: 20px;
+  }
 `;
 
 export const ToastMessage = styled.p`

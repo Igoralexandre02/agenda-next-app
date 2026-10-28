@@ -13,12 +13,29 @@ export const Container = styled.main`
 
 export const Card = styled.div`
   width: 100%;
-  max-width: 400px;
+  max-width: 420px;
   padding: ${({ theme }) => theme.spacing['2xl']};
   background: ${({ theme }) => theme.colors.surface};
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radius.lg};
-  box-shadow: ${({ theme }) => theme.shadows.md};
+  box-shadow: ${({ theme }) => theme.shadows.lg};
+`;
+
+export const BrandBadge = styled.div`
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  margin: 0 auto ${({ theme }) => theme.spacing.md};
+  border-radius: ${({ theme }) => theme.radius.full};
+  background: ${({ theme }) => theme.colors.accentSoft};
+  color: ${({ theme }) => theme.colors.accent};
+  border: 1px solid ${({ theme }) => theme.colors.accent}44;
+
+  svg {
+    width: 26px;
+    height: 26px;
+  }
 `;
 
 export const Header = styled.div`

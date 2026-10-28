@@ -32,14 +32,22 @@ export const SearchInput = styled.input`
   background: ${({ theme }) => theme.colors.surface};
   color: ${({ theme }) => theme.colors.text};
   font-size: 16px;
+  transition:
+    border-color 140ms ease,
+    box-shadow 140ms ease;
 
   &::placeholder {
     color: ${({ theme }) => theme.colors.textSubtle};
   }
 
+  &:hover:not(:focus) {
+    border-color: ${({ theme }) => theme.colors.borderStrong};
+  }
+
   &:focus {
     outline: none;
-    border-color: ${({ theme }) => theme.colors.text};
+    border-color: ${({ theme }) => theme.colors.accent};
+    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors.focusRingAlpha};
   }
 `;
 
@@ -56,6 +64,12 @@ export const FilterButton = styled.button`
   color: ${({ theme }) => theme.colors.text};
   font-size: ${({ theme }) => theme.typography.size.sm};
   font-weight: ${({ theme }) => theme.typography.weight.medium};
+  touch-action: manipulation;
+  user-select: none;
+  transition:
+    transform 100ms ${({ theme }) => theme.easing.out},
+    background-color 120ms ease,
+    border-color 120ms ease;
 
   svg {
     width: 18px;
@@ -64,6 +78,15 @@ export const FilterButton = styled.button`
 
   &:hover {
     background: ${({ theme }) => theme.colors.surfaceMuted};
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.colors.focusRing};
+    outline-offset: 2px;
   }
 `;
 
@@ -80,7 +103,16 @@ export const FilterCount = styled.span`
   font-weight: ${({ theme }) => theme.typography.weight.bold};
 `;
 
-export const ResumoFiltro = styled.p`
-  font-size: ${({ theme }) => theme.typography.size.sm};
+export const ResumoFiltro = styled.div`
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  width: fit-content;
+  border-radius: ${({ theme }) => theme.radius.pill};
+  background: ${({ theme }) => theme.colors.surfaceMuted};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  font-size: ${({ theme }) => theme.typography.size.xs};
   color: ${({ theme }) => theme.colors.textMuted};
+  font-weight: ${({ theme }) => theme.typography.weight.medium};
 `;

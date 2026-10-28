@@ -2,6 +2,7 @@
 
 import { useId, useRef } from 'react';
 
+import { XIcon } from '@/src/components/icons';
 import {
   Portal,
   useEscapeKey,
@@ -62,7 +63,7 @@ export function BottomSheet({
           <Head>
             <HeadTitle id={titleId}>{title}</HeadTitle>
             <CloseButton onClick={onClose} aria-label="Fechar">
-              ✕
+              <XIcon />
             </CloseButton>
           </Head>
           <Body>{children}</Body>

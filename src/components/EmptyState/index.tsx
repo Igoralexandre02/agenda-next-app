@@ -1,6 +1,7 @@
 'use client';
 
 import styled from 'styled-components';
+import { CalendarIcon } from '@/src/components/icons';
 
 const Wrapper = styled.div`
   display: flex;
@@ -15,12 +16,19 @@ const Wrapper = styled.div`
 const IconCircle = styled.div`
   display: grid;
   place-items: center;
-  width: 64px;
-  height: 64px;
+  width: 56px;
+  height: 56px;
   margin-bottom: ${({ theme }) => theme.spacing.sm};
   border-radius: ${({ theme }) => theme.radius.full};
   background: ${({ theme }) => theme.colors.surfaceMuted};
-  font-size: 28px;
+  color: ${({ theme }) => theme.colors.textMuted};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+
+  svg {
+    width: 26px;
+    height: 26px;
+    color: ${({ theme }) => theme.colors.textMuted};
+  }
 `;
 
 const Title = styled.h2`
@@ -33,10 +41,11 @@ const Description = styled.p`
   max-width: 320px;
   font-size: ${({ theme }) => theme.typography.size.sm};
   color: ${({ theme }) => theme.colors.textMuted};
+  line-height: ${({ theme }) => theme.typography.lineHeight.normal};
 `;
 
 const Action = styled.div`
-  margin-top: ${({ theme }) => theme.spacing.lg};
+  margin-top: ${({ theme }) => theme.spacing.md};
 `;
 
 export interface EmptyStateProps {
@@ -47,14 +56,14 @@ export interface EmptyStateProps {
 }
 
 export function EmptyState({
-  icon = '📅',
+  icon,
   title,
   description,
   action,
 }: EmptyStateProps) {
   return (
     <Wrapper>
-      <IconCircle aria-hidden>{icon}</IconCircle>
+      <IconCircle aria-hidden>{icon ?? <CalendarIcon />}</IconCircle>
       <Title>{title}</Title>
       {description && <Description>{description}</Description>}
       {action && <Action>{action}</Action>}

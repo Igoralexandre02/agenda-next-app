@@ -10,6 +10,11 @@ import {
 } from 'react';
 
 import {
+  AlertCircleIcon,
+  CheckCircleIcon,
+  InfoIcon,
+} from '@/src/components/icons';
+import {
   ToastViewport,
   ToastItem,
   ToastIcon,
@@ -35,11 +40,11 @@ const ToastContext = createContext<ToastContextValue | null>(null);
 
 const DURACAO_MS = 3600;
 
-const ICONES: Record<ToastTipo, string> = {
-  success: '✓',
-  error: '!',
-  info: 'i',
-};
+function renderIcone(tipo: ToastTipo) {
+  if (tipo === 'success') return <CheckCircleIcon />;
+  if (tipo === 'error') return <AlertCircleIcon />;
+  return <InfoIcon />;
+}
 
 export function ToastProvider({ children }: { children: React.ReactNode }) {
   const [toasts, setToasts] = useState<Toast[]>([]);
@@ -78,10 +83,18 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
             key={toast.id}
             $tipo={toast.tipo}
             role="status"
+            tabIndex={0}
             onClick={() => remover(toast.id)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                remover(toast.id);
+              }
+            }}
+            aria-label={`Notificação: ${toast.mensagem}. Pressione Enter para fechar.`}
           >
             <ToastIcon $tipo={toast.tipo} aria-hidden>
-              {ICONES[toast.tipo]}
+              {renderIcone(toast.tipo)}
             </ToastIcon>
             <ToastMessage>{toast.mensagem}</ToastMessage>
           </ToastItem>

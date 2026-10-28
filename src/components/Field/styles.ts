@@ -31,31 +31,38 @@ export const controlCss = css<{ $invalid?: boolean }>`
   border-radius: ${({ theme }) => theme.radius.md};
   border: 1px solid
     ${({ theme, $invalid }) =>
-      $invalid ? theme.colors.dangerSolid : theme.colors.borderStrong};
+      $invalid ? theme.colors.dangerSolid : theme.colors.border};
   background: ${({ theme }) => theme.colors.surface};
   color: ${({ theme }) => theme.colors.text};
   font-size: 16px; /* >=16px evita zoom automático no iOS */
   line-height: 1.2;
   transition:
-    border-color ${({ theme }) => theme.transition.fast},
-    box-shadow ${({ theme }) => theme.transition.fast};
+    border-color 140ms ease,
+    box-shadow 140ms ease,
+    background-color 140ms ease;
   appearance: none;
 
   &::placeholder {
     color: ${({ theme }) => theme.colors.textSubtle};
   }
 
+  &:hover:not(:disabled):not(:focus) {
+    border-color: ${({ theme, $invalid }) =>
+      $invalid ? theme.colors.dangerSolid : theme.colors.borderStrong};
+  }
+
   &:focus {
     outline: none;
     border-color: ${({ theme, $invalid }) =>
-      $invalid ? theme.colors.dangerSolid : theme.colors.text};
+      $invalid ? theme.colors.dangerSolid : theme.colors.accent};
     box-shadow: 0 0 0 3px
       ${({ theme, $invalid }) =>
-        $invalid ? theme.colors.dangerBg : theme.colors.focusRing + '33'};
+        $invalid ? theme.colors.dangerBg : theme.colors.focusRingAlpha};
   }
 
   &:disabled {
     opacity: 0.6;
     cursor: not-allowed;
+    background: ${({ theme }) => theme.colors.surfaceMuted};
   }
 `;

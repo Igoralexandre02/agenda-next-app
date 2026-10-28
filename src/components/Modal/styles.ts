@@ -6,7 +6,7 @@ const fade = keyframes`
 `;
 
 const rise = keyframes`
-  from { opacity: 0; transform: translateY(16px) scale(0.98); }
+  from { opacity: 0; transform: translateY(12px) scale(0.97); }
   to { opacity: 1; transform: translateY(0) scale(1); }
 `;
 
@@ -19,6 +19,8 @@ export const Overlay = styled.div`
   justify-content: center;
   padding: ${({ theme }) => theme.spacing.lg};
   background: ${({ theme }) => theme.colors.overlay};
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   animation: ${fade} ${({ theme }) => theme.transition.fast};
 `;
 

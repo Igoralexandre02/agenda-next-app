@@ -9,6 +9,7 @@ export const lightTheme: AppTheme = {
     surface: '#ffffff',
     surfaceMuted: '#eef0f3',
     surfaceRaised: '#ffffff',
+    surfaceHover: '#f8f9fa',
 
     border: '#e3e6ea',
     borderStrong: '#cfd4da',
@@ -23,10 +24,12 @@ export const lightTheme: AppTheme = {
     primaryText: '#ffffff',
 
     accent: '#a86f1c',
-    accentSoft: '#f4e9d6',
+    accentHover: '#8f5c14',
+    accentSoft: '#fbf4ea',
     accentText: '#ffffff',
 
     focusRing: '#3b82f6',
+    focusRingAlpha: 'rgba(59, 130, 246, 0.22)',
     overlay: 'rgba(15, 18, 22, 0.45)',
 
     statusAgendadoBg: '#e7f0fe',
@@ -49,8 +52,8 @@ export const lightTheme: AppTheme = {
     infoText: '#1a4fb0',
   },
   shadows: {
-    sm: '0 1px 2px rgba(16, 24, 40, 0.06)',
-    md: '0 4px 14px rgba(16, 24, 40, 0.08)',
-    lg: '0 16px 40px rgba(16, 24, 40, 0.16)',
+    sm: '0 1px 2px rgba(16, 24, 40, 0.05)',
+    md: '0 4px 14px -2px rgba(16, 24, 40, 0.08), 0 2px 6px -1px rgba(16, 24, 40, 0.04)',
+    lg: '0 14px 36px -4px rgba(16, 24, 40, 0.12), 0 4px 14px -2px rgba(16, 24, 40, 0.06)',
   },
 };

@@ -3,6 +3,7 @@
 import styled from 'styled-components';
 
 import { Button } from '@/src/components/Button';
+import { AlertCircleIcon } from '@/src/components/icons';
 
 const Wrapper = styled.div`
   display: flex;
@@ -17,14 +18,18 @@ const Wrapper = styled.div`
 const IconCircle = styled.div`
   display: grid;
   place-items: center;
-  width: 64px;
-  height: 64px;
+  width: 56px;
+  height: 56px;
   margin-bottom: ${({ theme }) => theme.spacing.sm};
   border-radius: ${({ theme }) => theme.radius.full};
   background: ${({ theme }) => theme.colors.dangerBg};
   color: ${({ theme }) => theme.colors.dangerText};
-  font-size: 28px;
-  font-weight: ${({ theme }) => theme.typography.weight.bold};
+  border: 1px solid ${({ theme }) => theme.colors.dangerSolid}33;
+
+  svg {
+    width: 28px;
+    height: 28px;
+  }
 `;
 
 const Title = styled.h2`
@@ -58,7 +63,9 @@ export function ErrorState({
 }: ErrorStateProps) {
   return (
     <Wrapper role="alert">
-      <IconCircle aria-hidden>!</IconCircle>
+      <IconCircle aria-hidden>
+        <AlertCircleIcon />
+      </IconCircle>
       <Title>{title}</Title>
       <Description>{description}</Description>
       {onRetry && (

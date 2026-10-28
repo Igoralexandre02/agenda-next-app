@@ -18,6 +18,8 @@ export const Overlay = styled.div`
   align-items: flex-end;
   justify-content: center;
   background: ${({ theme }) => theme.colors.overlay};
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   animation: ${fade} ${({ theme }) => theme.transition.fast};
 
   ${({ theme }) => theme.media.tablet} {
@@ -81,12 +83,23 @@ export const CloseButton = styled.button`
   height: 36px;
   border-radius: ${({ theme }) => theme.radius.full};
   color: ${({ theme }) => theme.colors.textMuted};
-  font-size: 20px;
-  line-height: 1;
+  transition:
+    background-color 120ms ease,
+    color 120ms ease,
+    transform 100ms ${({ theme }) => theme.easing.out};
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
 
   &:hover {
     background: ${({ theme }) => theme.colors.surfaceMuted};
     color: ${({ theme }) => theme.colors.text};
+  }
+
+  &:active {
+    transform: scale(0.92);
   }
 `;
 

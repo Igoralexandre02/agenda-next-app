@@ -4,12 +4,14 @@ import { FormEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { Button } from '@/src/components/Button';
+import { ScissorsIcon } from '@/src/components/icons';
 import { Input } from '@/src/components/Input';
 import { login } from '@/src/services/auth.service';
 import { USE_MOCK } from '@/src/services/config';
 import { salvarToken } from '@/src/lib/auth';
 
 import {
+  BrandBadge,
   Card,
   Container,
   ErrorMessage,
@@ -47,6 +49,9 @@ export default function LoginForm() {
     <Container>
       <Card>
         <Header>
+          <BrandBadge aria-hidden>
+            <ScissorsIcon />
+          </BrandBadge>
           <Title>Entrar</Title>
           <Subtitle>Acesse o painel de agendamentos da barbearia</Subtitle>
         </Header>

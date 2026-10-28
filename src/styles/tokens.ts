@@ -83,8 +83,15 @@ export const layout = {
   headerHeight: '56px',
 } as const;
 
+export const easing = {
+  /** Curva física padrão (Emil Kowalski / Apple-style fluid response). */
+  out: 'cubic-bezier(0.16, 1, 0.3, 1)',
+  inOut: 'cubic-bezier(0.4, 0, 0.2, 1)',
+  spring: 'cubic-bezier(0.175, 0.885, 0.32, 1.1)',
+} as const;
+
 export const transition = {
-  fast: '120ms ease',
-  base: '200ms ease',
-  slow: '320ms ease',
+  fast: '120ms cubic-bezier(0.16, 1, 0.3, 1)',
+  base: '200ms cubic-bezier(0.16, 1, 0.3, 1)',
+  slow: '320ms cubic-bezier(0.16, 1, 0.3, 1)',
 } as const;

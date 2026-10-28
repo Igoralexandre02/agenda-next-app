@@ -17,9 +17,22 @@ export const SinoButton = styled.button`
   height: 40px;
   border-radius: ${({ theme }) => theme.radius.full};
   color: ${({ theme }) => theme.colors.text};
+  touch-action: manipulation;
+  transition:
+    background-color 120ms ease,
+    transform 100ms ${({ theme }) => theme.easing.out};
 
   &:hover {
     background: ${({ theme }) => theme.colors.surfaceMuted};
+  }
+
+  &:active {
+    transform: scale(0.92);
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.colors.focusRing};
+    outline-offset: 2px;
   }
 `;
 

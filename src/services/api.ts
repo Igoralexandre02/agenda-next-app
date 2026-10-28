@@ -1,4 +1,4 @@
-import { obterToken } from '../lib/auth';
+import { obterToken, removerToken, salvarToken } from '../lib/auth';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -19,7 +19,7 @@ export async function refreshAccessToken() {
       throw new Error('Token não retornado pelo servidor');
     }
 
-    localStorage.setItem('token', data.jwt);
+    salvarToken(data.jwt);
 
     return data.jwt;
   } catch (error) {
@@ -86,9 +86,9 @@ export async function apiGet<T>(endpoint: string): Promise<T> {
 }
 
 export function encerrarSessao() {
-  localStorage.removeItem('token');
+  removerToken();
 
-  if (window.location.pathname !== '/login') {
+  if (typeof window !== 'undefined' && window.location.pathname !== '/login') {
     window.location.replace('/login');
   }
 }

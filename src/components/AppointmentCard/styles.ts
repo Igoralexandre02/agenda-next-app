@@ -28,8 +28,9 @@ function normalizarStatus(status: Status | null): StatusNome | null {
 }
 
 export const Card = styled.button<{ $status: Status | null }>`
+  position: relative;
   display: flex;
-  align-items: stretch;
+  align-items: center;
   gap: ${({ theme }) => theme.spacing.lg};
   width: 100%;
   text-align: left;
@@ -37,21 +38,31 @@ export const Card = styled.button<{ $status: Status | null }>`
   border-radius: ${({ theme }) => theme.radius.lg};
   background: ${({ theme }) => theme.colors.surface};
   border: 1px solid ${({ theme }) => theme.colors.border};
+  touch-action: manipulation;
+  user-select: none;
+  cursor: pointer;
   transition:
-    border-color ${({ theme }) => theme.transition.fast},
-    transform ${({ theme }) => theme.transition.fast},
-    box-shadow ${({ theme }) => theme.transition.fast};
+    border-color 140ms ease,
+    background-color 140ms ease,
+    transform 100ms ${({ theme }) => theme.easing.out},
+    box-shadow 140ms ease;
 
   opacity: ${({ $status }) =>
-    $status?.nome?.toLowerCase() === 'cancelado' ? 0.72 : 1};
+    $status?.nome?.toLowerCase() === 'cancelado' ? 0.68 : 1};
 
   &:hover {
     border-color: ${({ theme }) => theme.colors.borderStrong};
-    box-shadow: ${({ theme }) => theme.shadows.sm};
+    background: ${({ theme }) => theme.colors.surfaceHover};
+    box-shadow: ${({ theme }) => theme.shadows.md};
   }
 
   &:active {
-    transform: scale(0.99);
+    transform: scale(0.985);
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.colors.focusRing};
+    outline-offset: 2px;
   }
 `;
 
@@ -61,8 +72,8 @@ export const TimeColumn = styled.div<{ $status: Status | null }>`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-width: 58px;
-  padding-right: ${({ theme }) => theme.spacing.lg};
+  min-width: 62px;
+  padding-right: ${({ theme }) => theme.spacing.md};
   border-right: 1px solid ${({ theme }) => theme.colors.border};
 `;
 
@@ -110,5 +121,25 @@ export const Phone = styled.span`
 `;
 
 export const BadgeRow = styled.div`
-  margin-top: ${({ theme }) => theme.spacing.xs};
+  margin-top: 2px;
+`;
+
+export const ArrowSlot = styled.div`
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  color: ${({ theme }) => theme.colors.textSubtle};
+  transition:
+    transform 120ms ease,
+    color 120ms ease;
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  ${Card}:hover & {
+    color: ${({ theme }) => theme.colors.text};
+    transform: translateX(2px);
+  }
 `;

@@ -1,4 +1,5 @@
 import {
+  easing,
   layout,
   media,
   radius,
@@ -21,6 +22,8 @@ export interface ThemeColors {
   surfaceMuted: string;
   /** Superfície elevada (menus, sheets, modais). */
   surfaceRaised: string;
+  /** Superfície em hover. */
+  surfaceHover: string;
 
   border: string;
   borderStrong: string;
@@ -37,10 +40,12 @@ export interface ThemeColors {
 
   /** Cor de acento (brass) — destaque de horário, item ativo da navegação. */
   accent: string;
+  accentHover: string;
   accentSoft: string;
   accentText: string;
 
   focusRing: string;
+  focusRingAlpha: string;
   overlay: string;
 
   /** Cores por status de agendamento. */
@@ -83,6 +88,7 @@ export interface AppTheme {
   zIndex: typeof zIndex;
   layout: typeof layout;
   transition: typeof transition;
+  easing: typeof easing;
 }
 
 /** Base compartilhada — cada tema só precisa declarar `name`, `colors` e `shadows`. */
@@ -94,4 +100,5 @@ export const themeBase = {
   zIndex,
   layout,
   transition,
+  easing,
 } as const;

@@ -1,12 +1,21 @@
 'use client';
 
-import { PhoneIcon } from '@/src/components/icons';
+import { ChevronRightIcon, PhoneIcon } from '@/src/components/icons';
 import { StatusBadge } from '@/src/components/StatusBadge';
 import type { Agendamento } from '@/src/types/agendamento';
 import { formatarHorario } from '@/src/utils/date';
 import { mascararTelefone } from '@/src/utils/phone';
 
-import { BadgeRow, Body, Card, Name, Phone, Time, TimeColumn } from './styles';
+import {
+  ArrowSlot,
+  BadgeRow,
+  Body,
+  Card,
+  Name,
+  Phone,
+  Time,
+  TimeColumn,
+} from './styles';
 
 export interface AppointmentCardProps {
   agendamento: Agendamento;
@@ -51,6 +60,10 @@ export function AppointmentCard({
           <StatusBadge status={agendamento.status_id?.nome} size="sm" />
         </BadgeRow>
       </Body>
+
+      <ArrowSlot aria-hidden>
+        <ChevronRightIcon />
+      </ArrowSlot>
     </Card>
   );
 }

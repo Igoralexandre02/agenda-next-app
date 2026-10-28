@@ -15,7 +15,12 @@ export const Nav = styled.nav`
       env(safe-area-inset-bottom, 0px)
   );
   padding-bottom: env(safe-area-inset-bottom, 0px);
-  background: ${({ theme }) => theme.colors.surface};
+  background: ${({ theme }) =>
+    theme.name === 'dark'
+      ? 'rgba(25, 28, 31, 0.88)'
+      : 'rgba(255, 255, 255, 0.88)'};
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border-top: 1px solid ${({ theme }) => theme.colors.border};
 
   ${({ theme }) => theme.media.tablet} {
@@ -43,7 +48,11 @@ export const Item = styled(Link)<{ $active: boolean; $highlight?: boolean }>`
   font-weight: ${({ theme }) => theme.typography.weight.medium};
   color: ${({ theme, $active }) =>
     $active ? theme.colors.text : theme.colors.textSubtle};
-  transition: color ${({ theme }) => theme.transition.fast};
+  touch-action: manipulation;
+  user-select: none;
+  transition:
+    color 120ms ease,
+    transform 100ms ${({ theme }) => theme.easing.out};
 
   svg {
     width: 24px;
@@ -55,6 +64,16 @@ export const Item = styled(Link)<{ $active: boolean; $highlight?: boolean }>`
 
   &:hover {
     color: ${({ theme }) => theme.colors.text};
+  }
+
+  &:active {
+    transform: scale(0.92);
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.colors.focusRing};
+    outline-offset: -2px;
+    border-radius: ${({ theme }) => theme.radius.sm};
   }
 `;
 

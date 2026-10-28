@@ -127,7 +127,7 @@ export default function AgendamentosPage() {
 
         {semResultados && !buscaVazia && (
           <EmptyState
-            icon="🔍"
+            icon={<SearchIcon />}
             title="Nada encontrado"
             description="Nenhum agendamento corresponde aos filtros selecionados."
             action={

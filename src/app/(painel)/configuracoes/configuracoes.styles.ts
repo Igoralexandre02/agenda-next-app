@@ -10,6 +10,7 @@ export const Grupo = styled.section`
   border-radius: ${({ theme }) => theme.radius.lg};
   background: ${({ theme }) => theme.colors.surface};
   border: 1px solid ${({ theme }) => theme.colors.border};
+  box-shadow: ${({ theme }) => theme.shadows.sm};
 `;
 
 export const GrupoTitulo = styled.h2`
@@ -29,24 +30,57 @@ export const OpcaoTema = styled.div`
 export const Radios = styled.div`
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.spacing.xs};
+  gap: ${({ theme }) => theme.spacing.sm};
 `;
 
 export const RadioLinha = styled.label<{ $ativo: boolean }>`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.md};
-  padding: ${({ theme }) => theme.spacing.md};
+  padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.lg};
   border-radius: ${({ theme }) => theme.radius.md};
   border: 1px solid
-    ${({ theme, $ativo }) => ($ativo ? theme.colors.text : theme.colors.border)};
+    ${({ theme, $ativo }) =>
+      $ativo ? theme.colors.accent : theme.colors.border};
   background: ${({ theme, $ativo }) =>
-    $ativo ? theme.colors.surfaceMuted : 'transparent'};
+    $ativo ? theme.colors.accentSoft : 'transparent'};
   cursor: pointer;
-  transition: border-color ${({ theme }) => theme.transition.fast};
+  touch-action: manipulation;
+  user-select: none;
+  transition:
+    border-color 140ms ease,
+    background-color 140ms ease,
+    transform 100ms ${({ theme }) => theme.easing.out};
+
+  &:hover {
+    border-color: ${({ theme, $ativo }) =>
+      $ativo ? theme.colors.accent : theme.colors.borderStrong};
+  }
+
+  &:active {
+    transform: scale(0.985);
+  }
 
   input {
-    accent-color: ${({ theme }) => theme.colors.text};
+    accent-color: ${({ theme }) => theme.colors.accent};
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+  }
+`;
+
+export const RadioIcon = styled.div<{ $ativo: boolean }>`
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: ${({ theme }) => theme.radius.sm};
+  background: ${({ theme, $ativo }) =>
+    $ativo ? theme.colors.accentSoft : theme.colors.surfaceMuted};
+  color: ${({ theme, $ativo }) =>
+    $ativo ? theme.colors.accent : theme.colors.textMuted};
+
+  svg {
     width: 18px;
     height: 18px;
   }

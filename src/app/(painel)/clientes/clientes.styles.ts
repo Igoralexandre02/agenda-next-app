@@ -33,14 +33,22 @@ export const SearchInput = styled.input`
   background: ${({ theme }) => theme.colors.surface};
   color: ${({ theme }) => theme.colors.text};
   font-size: 16px;
+  transition:
+    border-color 140ms ease,
+    box-shadow 140ms ease;
 
   &::placeholder {
     color: ${({ theme }) => theme.colors.textSubtle};
   }
 
+  &:hover:not(:focus) {
+    border-color: ${({ theme }) => theme.colors.borderStrong};
+  }
+
   &:focus {
     outline: none;
-    border-color: ${({ theme }) => theme.colors.text};
+    border-color: ${({ theme }) => theme.colors.accent};
+    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors.focusRingAlpha};
   }
 `;
 
@@ -65,11 +73,13 @@ export const ClienteCard = styled.div`
   background: ${({ theme }) => theme.colors.surface};
   border: 1px solid ${({ theme }) => theme.colors.border};
   transition:
-    border-color ${({ theme }) => theme.transition.fast},
-    box-shadow ${({ theme }) => theme.transition.fast};
+    border-color 140ms ease,
+    background-color 140ms ease,
+    box-shadow 140ms ease;
 
   &:hover {
     border-color: ${({ theme }) => theme.colors.borderStrong};
+    background: ${({ theme }) => theme.colors.surfaceHover};
     box-shadow: ${({ theme }) => theme.shadows.sm};
   }
 `;
@@ -99,11 +109,13 @@ export const TelefoneLink = styled.a`
   color: ${({ theme }) => theme.colors.textMuted};
   text-decoration: none;
   width: fit-content;
+  touch-action: manipulation;
+  transition: color 120ms ease;
 
   svg {
-    width: 14px;
-    height: 14px;
-    color: ${({ theme }) => theme.colors.accent};
+    width: 15px;
+    height: 15px;
+    color: #25d366; /* WhatsApp brand color */
   }
 
   &:hover {
@@ -143,10 +155,13 @@ export const ActionButton = styled.button<{ $danger?: boolean }>`
   color: ${({ theme, $danger }) =>
     $danger ? theme.colors.dangerText : theme.colors.textMuted};
   cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
   transition:
-    color ${({ theme }) => theme.transition.fast},
-    background-color ${({ theme }) => theme.transition.fast},
-    border-color ${({ theme }) => theme.transition.fast};
+    transform 100ms ${({ theme }) => theme.easing.out},
+    color 120ms ease,
+    background-color 120ms ease,
+    border-color 120ms ease;
 
   svg {
     width: 16px;
@@ -160,5 +175,14 @@ export const ActionButton = styled.button<{ $danger?: boolean }>`
       $danger ? theme.colors.dangerBg : theme.colors.surfaceRaised};
     border-color: ${({ theme, $danger }) =>
       $danger ? theme.colors.dangerText : theme.colors.borderStrong};
+  }
+
+  &:active {
+    transform: scale(0.92);
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.colors.focusRing};
+    outline-offset: 2px;
   }
 `;

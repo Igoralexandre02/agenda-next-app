@@ -39,15 +39,16 @@ const Badge = styled.span<{
   border-radius: ${({ theme }) => theme.radius.pill};
   font-weight: ${({ theme }) => theme.typography.weight.semibold};
   white-space: nowrap;
+  letter-spacing: 0.01em;
 
   ${({ $size, theme }) =>
     $size === 'sm'
       ? css`
-          padding: 3px 8px;
+          padding: 2px 8px;
           font-size: ${theme.typography.size.xs};
         `
       : css`
-          padding: 5px 12px;
+          padding: 4px 12px;
           font-size: ${theme.typography.size.sm};
         `}
 
@@ -59,6 +60,7 @@ const Badge = styled.span<{
     height: 6px;
     border-radius: 50%;
     background: currentColor;
+    opacity: 0.9;
   }
 `;
 

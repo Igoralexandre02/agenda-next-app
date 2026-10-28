@@ -6,20 +6,25 @@ import styled from 'styled-components';
 import { Field } from '@/src/components/Field';
 import { controlCss } from '@/src/components/Field/styles';
 
+import { ChevronDownIcon } from '@/src/components/icons';
+
 const Wrapper = styled.div`
   position: relative;
+`;
 
-  &::after {
-    content: '';
-    position: absolute;
-    right: 16px;
-    top: 50%;
-    width: 8px;
-    height: 8px;
-    border-right: 2px solid ${({ theme }) => theme.colors.textMuted};
-    border-bottom: 2px solid ${({ theme }) => theme.colors.textMuted};
-    transform: translateY(-70%) rotate(45deg);
-    pointer-events: none;
+const SelectIconWrapper = styled.div`
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: ${({ theme }) => theme.colors.textMuted};
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+
+  svg {
+    width: 18px;
+    height: 18px;
   }
 `;
 
@@ -65,6 +70,9 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
                 </option>
               ))}
             </StyledSelect>
+            <SelectIconWrapper aria-hidden>
+              <ChevronDownIcon />
+            </SelectIconWrapper>
           </Wrapper>
         )}
       </Field>

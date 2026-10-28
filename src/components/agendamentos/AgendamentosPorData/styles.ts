@@ -13,8 +13,13 @@ export const GrupoHeader = styled.div`
   display: flex;
   align-items: baseline;
   gap: ${({ theme }) => theme.spacing.sm};
-  padding: ${({ theme }) => theme.spacing.xs} 0;
-  background: ${({ theme }) => theme.colors.background};
+  padding: ${({ theme }) => theme.spacing.sm} 0;
+  background: ${({ theme }) =>
+    theme.name === 'dark'
+      ? 'rgba(15, 17, 19, 0.88)'
+      : 'rgba(245, 246, 248, 0.88)'};
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 `;
 
 export const GrupoTitulo = styled.h2`
