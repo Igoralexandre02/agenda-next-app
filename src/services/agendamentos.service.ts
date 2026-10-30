@@ -1,4 +1,4 @@
-import { Agendamento } from '../types/agendamento';
+import { Agendamento, mapAgendamento } from '../types/agendamento';
 import { StrapiCollectionResponse, StrapiItemResponse } from '../types/strapi';
 import { apiFetch, apiGet } from './api';
 
@@ -8,17 +8,6 @@ function formatarHorario(horario: string) {
   }
 
   return horario;
-}
-
-function mapAgendamento(data: Agendamento): Agendamento {
-  return {
-    id: data.id,
-    documentId: data.documentId,
-    data: data.data,
-    horario: data.horario,
-    status_id: data.status_id ?? null,
-    cliente_id: data.cliente_id ?? null,
-  };
 }
 
 export async function getAgendamentos(): Promise<Agendamento[]> {

@@ -11,7 +11,7 @@ export interface Agendamento {
 }
 
 export type PeriodoFiltro =
-  'hoje' | 'amanha' | 'semana' | 'mes' | 'todos' | 'personalizado';
+  'hoje' | 'amanha' | 'semana' | 'mes' | 'todos' | 'personalizado' | string;
 
 export const PERIODO_LABEL: Record<PeriodoFiltro, string> = {
   hoje: 'Hoje',
@@ -38,3 +38,14 @@ export const FILTROS_PADRAO: FiltrosAgendamento = {
   status: 'todos',
   busca: '',
 };
+
+export function mapAgendamento(data: Agendamento): Agendamento {
+  return {
+    id: data.id,
+    documentId: data.documentId,
+    data: data.data,
+    horario: data.horario,
+    status_id: data.status_id ?? null,
+    cliente_id: data.cliente_id ?? null,
+  };
+}

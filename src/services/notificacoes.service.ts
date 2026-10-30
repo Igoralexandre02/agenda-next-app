@@ -1,35 +1,16 @@
-import type { Notificacao } from '../types/notificacao';
+import { Notificacao, mapNotificacao } from '../types/notificacao';
 import { StrapiCollectionResponse, StrapiItemResponse } from '../types/strapi';
 import { apiFetch } from './api';
 
 /** Traz um lote generoso de uma vez — o volume diário é pequeno. */
 const PAGE_SIZE = 100;
 
-function mapNotificacao(dto: Notificacao): Notificacao {
-  return {
-    id: dto.id,
-    documentId: dto.documentId,
-    tipo: dto.tipo,
-    lida: dto.lida,
-    criadaEm: dto.criadaEm,
-    agendamento: dto.agendamento
-      ? {
-          documentId: dto.agendamento.documentId,
-          data: dto.agendamento.data,
-          horario: dto.agendamento.horario,
-          status_id: dto.agendamento.status_id ?? null,
-          cliente_id: dto.agendamento.cliente_id ?? null,
-        }
-      : null,
-  };
-}
-
 export async function getNotificacoesDoDia(
   dataISO: string,
 ): Promise<Notificacao[]> {
   const query = [
     `filters[agendamento][data][$eq]=${dataISO}`,
-    'populate=agendamento',
+    'populate[agendamento][populate]=*',
     'sort[0]=createdAt:desc',
     `pagination[pageSize]=${PAGE_SIZE}`,
   ].join('&');
@@ -53,7 +34,7 @@ export async function marcarNotificacaoComoLida(
   }
 
   const response = await apiFetch(
-    `/api/notificacoes/${documentId}?populate=agendamento`,
+    `/api/notificacoes/${documentId}?populate[agendamento][populate]=*`,
     {
       method: 'PUT',
       body: JSON.stringify({ data: { lida: true } }),

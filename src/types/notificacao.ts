@@ -1,4 +1,4 @@
-import { Agendamento } from './agendamento';
+import { Agendamento, mapAgendamento } from './agendamento';
 
 /** Tipos de notificação suportados pelo backend (enum do Content-Type). */
 export const TIPO_NOTIFICACAO = {
@@ -29,4 +29,17 @@ export interface Notificacao {
   lida: boolean;
   criadaEm: string;
   agendamento: Agendamento | null;
+}
+
+export function mapNotificacao(
+  dto: Notificacao & { createdAt?: string },
+): Notificacao {
+  return {
+    id: dto.id,
+    documentId: dto.documentId,
+    tipo: dto.tipo,
+    lida: dto.lida,
+    criadaEm: dto.criadaEm ?? dto.createdAt ?? '',
+    agendamento: dto.agendamento ? mapAgendamento(dto.agendamento) : null,
+  };
 }
