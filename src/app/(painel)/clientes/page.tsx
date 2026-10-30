@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 
 import { PageBody } from '@/src/components/AppShell';
 import { Button } from '@/src/components/Button';
-import { ClienteModal } from '@/src/components/clientes/ClienteModal';
+import { ClienteModal } from '@/src/components/Clientes/ClienteModal';
 import { ConfirmDialog } from '@/src/components/ConfirmDialog';
 import { EmptyState } from '@/src/components/EmptyState';
 import { ErrorState } from '@/src/components/ErrorState';
@@ -17,7 +17,7 @@ import {
   TrashIcon,
   UsersIcon,
   WhatsAppIcon,
-} from '@/src/components/icons';
+} from '@/src/components/Icons';
 import { Skeleton } from '@/src/components/Skeleton';
 import { useClientes } from '@/src/hooks/useClientes';
 import { useToast } from '@/src/hooks/useToast';

@@ -3,14 +3,14 @@
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { AgendamentosPorData } from '@/src/components/agendamentos/AgendamentosPorData';
-import { FiltrosSheet } from '@/src/components/agendamentos/FiltrosSheet';
+import { AgendamentosPorData } from '@/src/components/Agendamentos/AgendamentosPorData';
+import { FiltrosSheet } from '@/src/components/Agendamentos/FiltrosSheet';
 import { PageBody } from '@/src/components/AppShell';
 import { Button } from '@/src/components/Button';
 import { EmptyState } from '@/src/components/EmptyState';
 import { ErrorState } from '@/src/components/ErrorState';
 import { Header } from '@/src/components/Header';
-import { FilterIcon, PlusIcon, SearchIcon } from '@/src/components/icons';
+import { FilterIcon, PlusIcon, SearchIcon } from '@/src/components/Icons';
 import { AppointmentListSkeleton } from '@/src/components/Skeleton';
 import { useAgendamentos } from '@/src/hooks/useAgendamentos';
 import {

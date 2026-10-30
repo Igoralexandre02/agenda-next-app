@@ -4,10 +4,9 @@ import { FormEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { Button } from '@/src/components/Button';
-import { ScissorsIcon } from '@/src/components/icons';
+import { ScissorsIcon } from '@/src/components/Icons';
 import { Input } from '@/src/components/Input';
 import { login } from '@/src/services/auth.service';
-import { USE_MOCK } from '@/src/services/config';
 import { salvarToken } from '@/src/lib/auth';
 
 import {
@@ -60,9 +59,7 @@ export default function LoginForm() {
           <Input
             id="identifier"
             label="CPF"
-            placeholder={
-              USE_MOCK ? 'Qualquer valor (modo demonstração)' : 'Digite seu CPF'
-            }
+            placeholder={ 'Digite seu CPF' }
             inputMode="numeric"
             value={identifier}
             onChange={(e) => setIdentifier(e.target.value)}

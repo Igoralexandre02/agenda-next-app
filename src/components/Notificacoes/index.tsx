@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { BottomSheet } from '@/src/components/BottomSheet';
 import { EmptyState } from '@/src/components/EmptyState';
 import { ErrorState } from '@/src/components/ErrorState';
-import { BellIcon } from '@/src/components/icons';
+import { BellIcon } from '@/src/components/Icons';
 import { Loading } from '@/src/components/Loading';
 import { useNotificacoes } from '@/src/hooks/useNotificacoes';
 import { NotificacaoItem } from './NotificacaoItem';

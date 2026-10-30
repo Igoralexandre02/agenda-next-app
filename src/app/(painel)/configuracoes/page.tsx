@@ -10,7 +10,7 @@ import {
   LogOutIcon,
   MoonIcon,
   SunIcon,
-} from '@/src/components/icons';
+} from '@/src/components/Icons';
 import { useTheme } from '@/src/hooks/useTheme';
 import { removerToken } from '@/src/lib/auth';
 import type { ThemePreference } from '@/src/styles/themes';

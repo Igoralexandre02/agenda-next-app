@@ -3,7 +3,7 @@
 import styled from 'styled-components';
 
 import { Button } from '@/src/components/Button';
-import { AlertCircleIcon } from '@/src/components/icons';
+import { AlertCircleIcon } from '@/src/components/Icons';
 
 const Wrapper = styled.div`
   display: flex;

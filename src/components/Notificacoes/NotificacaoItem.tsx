@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 import { Button } from '@/src/components/Button';
-import { ClockIcon, WhatsAppIcon } from '@/src/components/icons';
+import { ClockIcon, WhatsAppIcon } from '@/src/components/Icons';
 import { useToast } from '@/src/hooks/useToast';
 import type { Notificacao } from '@/src/types/notificacao';
 import { TIPO_NOTIFICACAO_LABEL } from '@/src/types/notificacao';

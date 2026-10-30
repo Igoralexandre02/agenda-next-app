@@ -1,7 +1,7 @@
 'use client';
 
 import styled from 'styled-components';
-import { CalendarIcon } from '@/src/components/icons';
+import { CalendarIcon } from '@/src/components/Icons';
 
 const Wrapper = styled.div`
   display: flex;

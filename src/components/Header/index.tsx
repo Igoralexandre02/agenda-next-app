@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 
-import { ChevronLeftIcon } from '@/src/components/icons';
+import { ChevronLeftIcon } from '@/src/components/Icons';
 import { NotificacoesBell } from '@/src/components/Notificacoes';
 import { Bar, IconBtn, Slot, Subtitle, Title, TitleBox } from './styles';
 

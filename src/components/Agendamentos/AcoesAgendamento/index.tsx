@@ -11,7 +11,7 @@ import {
   PencilIcon,
   TrashIcon,
   XIcon,
-} from '@/src/components/icons';
+} from '@/src/components/Icons';
 import { useStatus } from '@/src/hooks/useStatus';
 import { useToast } from '@/src/hooks/useToast';
 import {

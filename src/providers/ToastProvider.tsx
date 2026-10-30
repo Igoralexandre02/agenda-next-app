@@ -13,7 +13,7 @@ import {
   AlertCircleIcon,
   CheckCircleIcon,
   InfoIcon,
-} from '@/src/components/icons';
+} from '@/src/components/Icons';
 import {
   ToastViewport,
   ToastItem,

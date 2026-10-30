@@ -2,7 +2,7 @@
 
 import { useId, useRef } from 'react';
 
-import { XIcon } from '@/src/components/icons';
+import { XIcon } from '@/src/components/Icons';
 import {
   Portal,
   useEscapeKey,

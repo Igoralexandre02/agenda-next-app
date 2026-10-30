@@ -8,7 +8,7 @@ import { Button } from '@/src/components/Button';
 import { EmptyState } from '@/src/components/EmptyState';
 import { ErrorState } from '@/src/components/ErrorState';
 import { Header } from '@/src/components/Header';
-import { PlusIcon } from '@/src/components/icons';
+import { PlusIcon } from '@/src/components/Icons';
 import { AppointmentListSkeleton } from '@/src/components/Skeleton';
 import { useAgendamentos } from '@/src/hooks/useAgendamentos';
 import type { Agendamento } from '@/src/types/agendamento';

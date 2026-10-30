@@ -3,7 +3,7 @@
 import { use } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { AgendamentoForm } from '@/src/components/agendamentos/AgendamentoForm';
+import { AgendamentoForm } from '@/src/components/Agendamentos/AgendamentoForm';
 import { PageBody } from '@/src/components/AppShell';
 import { ErrorState } from '@/src/components/ErrorState';
 import { Header } from '@/src/components/Header';

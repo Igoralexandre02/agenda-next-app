@@ -7,7 +7,7 @@ import {
   HomeIcon,
   SettingsIcon,
   UsersIcon,
-} from '@/src/components/icons';
+} from '@/src/components/Icons';
 import { Item, Nav } from './styles';
 
 const ITENS = [

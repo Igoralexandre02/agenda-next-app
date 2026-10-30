@@ -2,7 +2,7 @@
 
 import styled from 'styled-components';
 
-import { ChevronDownIcon } from '@/src/components/icons';
+import { ChevronDownIcon } from '@/src/components/Icons';
 
 export const SinoWrapper = styled.div`
   position: relative;

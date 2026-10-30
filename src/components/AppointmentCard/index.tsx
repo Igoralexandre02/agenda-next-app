@@ -1,6 +1,6 @@
 'use client';
 
-import { ChevronRightIcon, PhoneIcon } from '@/src/components/icons';
+import { ChevronRightIcon, PhoneIcon } from '@/src/components/Icons';
 import { StatusBadge } from '@/src/components/StatusBadge';
 import type { Agendamento } from '@/src/types/agendamento';
 import { formatarHorario } from '@/src/utils/date';

@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { Field } from '@/src/components/Field';
 import { controlCss } from '@/src/components/Field/styles';
 
-import { ChevronDownIcon } from '@/src/components/icons';
+import { ChevronDownIcon } from '@/src/components/Icons';
 
 const Wrapper = styled.div`
   position: relative;

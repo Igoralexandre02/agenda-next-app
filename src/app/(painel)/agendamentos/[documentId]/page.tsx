@@ -3,11 +3,11 @@
 import { use } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { AcoesAgendamento } from '@/src/components/agendamentos/AcoesAgendamento';
+import { AcoesAgendamento } from '@/src/components/Agendamentos/AcoesAgendamento';
 import { PageBody } from '@/src/components/AppShell';
 import { ErrorState } from '@/src/components/ErrorState';
 import { Header } from '@/src/components/Header';
-import { ClockIcon, PhoneIcon } from '@/src/components/icons';
+import { ClockIcon, PhoneIcon } from '@/src/components/Icons';
 import { Loading } from '@/src/components/Loading';
 import { StatusBadge } from '@/src/components/StatusBadge';
 import { useAgendamento } from '@/src/hooks/useAgendamento';
