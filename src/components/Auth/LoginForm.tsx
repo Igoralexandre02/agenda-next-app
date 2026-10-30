@@ -8,6 +8,7 @@ import { ScissorsIcon } from '@/src/components/Icons';
 import { Input } from '@/src/components/Input';
 import { login } from '@/src/services/auth.service';
 import { salvarToken } from '@/src/lib/auth';
+import { apenasDigitos, mascararCPF } from '@/src/utils/cpf';
 
 import {
   BrandBadge,
@@ -34,7 +35,10 @@ export default function LoginForm() {
     setLoading(true);
 
     try {
-      const response = await login({ identifier, password });
+      const response = await login({
+        identifier: apenasDigitos(identifier),
+        password,
+      });
 
       salvarToken(response.jwt);
       router.replace('/');
@@ -59,10 +63,11 @@ export default function LoginForm() {
           <Input
             id="identifier"
             label="CPF"
-            placeholder={ 'Digite seu CPF' }
+            placeholder="000.000.000-00"
             inputMode="numeric"
+            maxLength={14}
             value={identifier}
-            onChange={(e) => setIdentifier(e.target.value)}
+            onChange={(e) => setIdentifier(mascararCPF(e.target.value))}
             autoComplete="username"
             required
           />
