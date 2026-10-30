@@ -6,6 +6,7 @@ import { PageBody } from '@/src/components/AppShell';
 import { Button } from '@/src/components/Button';
 import { ClienteModal } from '@/src/components/Clientes/ClienteModal';
 import { ConfirmDialog } from '@/src/components/ConfirmDialog';
+import { DropdownMenu } from '@/src/components/DropdownMenu';
 import { EmptyState } from '@/src/components/EmptyState';
 import { ErrorState } from '@/src/components/ErrorState';
 import { Header } from '@/src/components/Header';
@@ -26,8 +27,6 @@ import type { Cliente } from '@/src/types/cliente';
 import { linkTelefone, mascararTelefone } from '@/src/utils/phone';
 
 import {
-  ActionButton,
-  Acoes,
   ClienteCard,
   Info,
   Lista,
@@ -222,26 +221,22 @@ export default function ClientesPage() {
                     )}
                   </Info>
 
-                  <Acoes>
-                    <ActionButton
-                      type="button"
-                      aria-label={`Editar cliente ${cliente.nome}`}
-                      title="Editar cliente"
-                      onClick={() => abrirEditarCliente(cliente)}
-                    >
-                      <PencilIcon />
-                    </ActionButton>
-
-                    <ActionButton
-                      type="button"
-                      $danger
-                      aria-label={`Excluir cliente ${cliente.nome}`}
-                      title="Excluir cliente"
-                      onClick={() => setClienteParaExcluir(cliente)}
-                    >
-                      <TrashIcon />
-                    </ActionButton>
-                  </Acoes>
+                  <DropdownMenu
+                    items={[
+                      {
+                        label: 'Editar',
+                        icon: <PencilIcon width={16} height={16} />,
+                        onClick: () => abrirEditarCliente(cliente),
+                      },
+                      {
+                        label: 'Excluir',
+                        icon: <TrashIcon width={16} height={16} />,
+                        onClick: () => setClienteParaExcluir(cliente),
+                        destructive: true,
+                      },
+                    ]}
+                    triggerLabel={`Ações para ${cliente.nome}`}
+                  />
                 </ClienteCard>
               );
             })}

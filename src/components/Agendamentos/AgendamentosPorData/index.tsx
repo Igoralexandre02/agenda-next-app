@@ -20,11 +20,15 @@ import {
 export interface AgendamentosPorDataProps {
   agendamentos: Agendamento[];
   onSelect: (agendamento: Agendamento) => void;
+  onEdit?: (agendamento: Agendamento) => void;
+  onDelete?: (agendamento: Agendamento) => void;
 }
 
 export function AgendamentosPorData({
   agendamentos,
   onSelect,
+  onEdit,
+  onDelete,
 }: AgendamentosPorDataProps) {
   const grupos = agruparPorData(agendamentos);
 
@@ -52,6 +56,8 @@ export function AgendamentosPorData({
                   key={item.id}
                   agendamento={item}
                   onClick={onSelect}
+                  onEdit={onEdit}
+                  onDelete={onDelete}
                 />
               ))}
             </Lista>

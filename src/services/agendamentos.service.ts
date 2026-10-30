@@ -1,6 +1,6 @@
 import { Agendamento, mapAgendamento } from '../types/agendamento';
 import { StrapiCollectionResponse, StrapiItemResponse } from '../types/strapi';
-import { apiFetch, apiGet } from './api';
+import { apiFetch, apiGet, obterMensagemErro } from './api';
 
 function formatarHorario(horario: string) {
   if (horario.length === 5) {
@@ -107,20 +107,17 @@ export async function alterarStatusAgendamento(
   return response.json();
 }
 
-export async function deletarAgendamento(documentId: string) {
+export async function deletarAgendamento(documentId: string): Promise<void> {
   if (!documentId) {
     throw new Error('ID do agendamento não informado');
   }
   const response = await apiFetch(`/api/agendamentos/${documentId}`, {
     method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-    },
   });
 
   if (!response.ok) {
-    throw new Error('Erro ao deletar agendamento');
+    throw new Error(
+      await obterMensagemErro(response, 'Erro ao deletar agendamento'),
+    );
   }
-
-  return response.json();
 }

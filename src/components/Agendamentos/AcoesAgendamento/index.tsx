@@ -1,51 +1,36 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import styled from 'styled-components';
 
 import { Button } from '@/src/components/Button';
 import { ConfirmDialog } from '@/src/components/ConfirmDialog';
-import {
-  CheckIcon,
-  PencilIcon,
-  TrashIcon,
-  XIcon,
-} from '@/src/components/Icons';
+import { CheckIcon, XIcon } from '@/src/components/Icons';
 import { useStatus } from '@/src/hooks/useStatus';
 import { useToast } from '@/src/hooks/useToast';
-import {
-  alterarStatusAgendamento,
-  deletarAgendamento,
-} from '@/src/services/agendamentos.service';
+import { alterarStatusAgendamento } from '@/src/services/agendamentos.service';
 import type { Agendamento } from '@/src/types/agendamento';
 
-const Grid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
   gap: ${({ theme }) => theme.spacing.sm};
 `;
 
-const FullRow = styled.div`
-  grid-column: 1 / -1;
-`;
-
-type Confirmacao = 'finalizar' | 'cancelar' | 'excluir' | null;
+type Confirmacao = 'finalizar' | 'cancelar' | null;
 
 export interface AcoesAgendamentoProps {
   agendamento: Agendamento;
   /** Chamado após finalizar/cancelar (mantém o usuário na tela). */
   onChanged: () => void;
-  /** Chamado após excluir. */
-  onDeleted: () => void;
+  /** Mantido para compatibilidade. */
+  onDeleted?: () => void;
 }
 
 export function AcoesAgendamento({
   agendamento,
   onChanged,
-  onDeleted,
 }: AcoesAgendamentoProps) {
-  const router = useRouter();
   const toast = useToast();
   const { status } = useStatus();
   const [confirmacao, setConfirmacao] = useState<Confirmacao>(null);
@@ -91,34 +76,12 @@ export function AcoesAgendamento({
     }
   }
 
-  async function excluir() {
-    try {
-      await deletarAgendamento(String(agendamento.documentId));
-      toast.sucesso('Agendamento excluído');
-      setConfirmacao(null);
-      onDeleted();
-    } catch (err) {
-      toast.erro(
-        err instanceof Error ? err.message : 'Erro ao excluir agendamento',
-      );
-    }
-  }
-
   return (
     <>
-      <Grid>
-        <Button
-          variant="secondary"
-          leftIcon={<PencilIcon width={18} height={18} />}
-          onClick={() =>
-            router.push(`/agendamentos/${agendamento.documentId}/editar`)
-          }
-        >
-          Editar
-        </Button>
-
+      <Container>
         <Button
           variant={encerrado ? 'secondary' : 'accent'}
+          fullWidth
           leftIcon={<CheckIcon width={18} height={18} />}
           disabled={encerrado}
           onClick={() => setConfirmacao('finalizar')}
@@ -126,31 +89,16 @@ export function AcoesAgendamento({
           Finalizar
         </Button>
 
-        <FullRow>
-          <Button
-            variant="secondary"
-            fullWidth
-            leftIcon={<XIcon width={18} height={18} />}
-            disabled={
-              agendamento.status_id?.nome?.toLowerCase() === 'cancelado'
-            }
-            onClick={() => setConfirmacao('cancelar')}
-          >
-            Cancelar agendamento
-          </Button>
-        </FullRow>
-
-        <FullRow>
-          <Button
-            variant="ghost"
-            fullWidth
-            leftIcon={<TrashIcon width={18} height={18} />}
-            onClick={() => setConfirmacao('excluir')}
-          >
-            Excluir
-          </Button>
-        </FullRow>
-      </Grid>
+        <Button
+          variant="secondary"
+          fullWidth
+          leftIcon={<XIcon width={18} height={18} />}
+          disabled={agendamento.status_id?.nome?.toLowerCase() === 'cancelado'}
+          onClick={() => setConfirmacao('cancelar')}
+        >
+          Cancelar agendamento
+        </Button>
+      </Container>
 
       <ConfirmDialog
         open={confirmacao === 'finalizar'}
@@ -168,17 +116,6 @@ export function AcoesAgendamento({
         confirmLabel="Cancelar agendamento"
         cancelLabel="Voltar"
         onConfirm={cancelar}
-        onCancel={() => setConfirmacao(null)}
-      />
-
-      <ConfirmDialog
-        open={confirmacao === 'excluir'}
-        title="Excluir agendamento?"
-        description={`Esta ação remove permanentemente o agendamento de ${agendamento.cliente_id?.nome ?? 'este cliente'}. Para manter o histórico, use "Cancelar" em vez de excluir.`}
-        confirmLabel="Excluir"
-        cancelLabel="Voltar"
-        destructive
-        onConfirm={excluir}
         onCancel={() => setConfirmacao(null)}
       />
     </>

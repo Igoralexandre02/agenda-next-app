@@ -7,12 +7,15 @@ import { AgendamentosPorData } from '@/src/components/Agendamentos/AgendamentosP
 import { FiltrosSheet } from '@/src/components/Agendamentos/FiltrosSheet';
 import { PageBody } from '@/src/components/AppShell';
 import { Button } from '@/src/components/Button';
+import { ConfirmDialog } from '@/src/components/ConfirmDialog';
 import { EmptyState } from '@/src/components/EmptyState';
 import { ErrorState } from '@/src/components/ErrorState';
 import { Header } from '@/src/components/Header';
 import { FilterIcon, PlusIcon, SearchIcon } from '@/src/components/Icons';
 import { AppointmentListSkeleton } from '@/src/components/Skeleton';
 import { useAgendamentos } from '@/src/hooks/useAgendamentos';
+import { useToast } from '@/src/hooks/useToast';
+import { deletarAgendamento } from '@/src/services/agendamentos.service';
 import {
   FILTROS_PADRAO,
   PERIODO_LABEL,
@@ -37,8 +40,11 @@ const FILTROS_INICIAIS: FiltrosAgendamento = {
 
 export default function AgendamentosPage() {
   const router = useRouter();
+  const toast = useToast();
   const [filtros, setFiltros] = useState<FiltrosAgendamento>(FILTROS_INICIAIS);
   const [sheetAberto, setSheetAberto] = useState(false);
+  const [agendamentoParaExcluir, setAgendamentoParaExcluir] =
+    useState<Agendamento | null>(null);
 
   const { todos, loading, error, recarregar } = useAgendamentos();
 
@@ -52,6 +58,24 @@ export default function AgendamentosPage() {
 
   function abrir(agendamento: Agendamento) {
     router.push(`/agendamentos/${agendamento.documentId}`);
+  }
+
+  async function handleConfirmarExclusao() {
+    if (!agendamentoParaExcluir?.documentId) {
+      toast.erro('Não foi possível identificar o agendamento para exclusão');
+      return;
+    }
+
+    try {
+      await deletarAgendamento(agendamentoParaExcluir.documentId);
+      toast.sucesso('Agendamento excluído com sucesso');
+      setAgendamentoParaExcluir(null);
+      recarregar();
+    } catch (err) {
+      toast.erro(
+        err instanceof Error ? err.message : 'Erro ao excluir agendamento',
+      );
+    }
   }
 
   const semResultados = !loading && !error && lista.length === 0;
@@ -142,7 +166,11 @@ export default function AgendamentosPage() {
         )}
 
         {!loading && !error && lista.length > 0 && (
-          <AgendamentosPorData agendamentos={lista} onSelect={abrir} />
+          <AgendamentosPorData
+            agendamentos={lista}
+            onSelect={abrir}
+            onDelete={setAgendamentoParaExcluir}
+          />
         )}
       </PageBody>
 
@@ -151,6 +179,17 @@ export default function AgendamentosPage() {
         onClose={() => setSheetAberto(false)}
         filtros={filtros}
         onApply={setFiltros}
+      />
+
+      <ConfirmDialog
+        open={Boolean(agendamentoParaExcluir)}
+        title="Excluir agendamento?"
+        description={`Esta ação remove permanentemente o agendamento de ${agendamentoParaExcluir?.cliente_id?.nome ?? 'este cliente'}. Para manter o histórico, use "Cancelar" em vez de excluir.`}
+        confirmLabel="Excluir"
+        cancelLabel="Voltar"
+        destructive
+        onConfirm={handleConfirmarExclusao}
+        onCancel={() => setAgendamentoParaExcluir(null)}
       />
     </>
   );

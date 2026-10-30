@@ -52,17 +52,12 @@ export async function criarStatus(data: { status: Status }) {
   return response.json();
 }
 
-export async function deletarStatus(documentId: string) {
+export async function deletarStatus(documentId: string): Promise<void> {
   const response = await apiFetch(`/api/statuses/${documentId}`, {
     method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-    },
   });
 
   if (!response.ok) {
     throw new Error('Erro ao deletar status');
   }
-
-  return response.json();
 }

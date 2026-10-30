@@ -5,12 +5,15 @@ import { useRouter } from 'next/navigation';
 
 import { AppointmentCard } from '@/src/components/AppointmentCard';
 import { Button } from '@/src/components/Button';
+import { ConfirmDialog } from '@/src/components/ConfirmDialog';
 import { EmptyState } from '@/src/components/EmptyState';
 import { ErrorState } from '@/src/components/ErrorState';
 import { Header } from '@/src/components/Header';
 import { PlusIcon } from '@/src/components/Icons';
 import { AppointmentListSkeleton } from '@/src/components/Skeleton';
 import { useAgendamentos } from '@/src/hooks/useAgendamentos';
+import { useToast } from '@/src/hooks/useToast';
+import { deletarAgendamento } from '@/src/services/agendamentos.service';
 import type { Agendamento } from '@/src/types/agendamento';
 import {
   ordenarPorDataHora,
@@ -40,7 +43,11 @@ import { getMe } from '@/src/services/auth.service';
 
 export default function DashboardPage() {
   const router = useRouter();
+  const toast = useToast();
   const { todos, loading, error, recarregar } = useAgendamentos();
+
+  const [agendamentoParaExcluir, setAgendamentoParaExcluir] =
+    useState<Agendamento | null>(null);
 
   const hoje = hojeISO();
 
@@ -67,6 +74,24 @@ export default function DashboardPage() {
 
   function abrir(agendamento: Agendamento) {
     router.push(`/agendamentos/${agendamento.documentId}`);
+  }
+
+  async function handleConfirmarExclusao() {
+    if (!agendamentoParaExcluir?.documentId) {
+      toast.erro('Não foi possível identificar o agendamento para exclusão');
+      return;
+    }
+
+    try {
+      await deletarAgendamento(agendamentoParaExcluir.documentId);
+      toast.sucesso('Agendamento excluído com sucesso');
+      setAgendamentoParaExcluir(null);
+      recarregar();
+    } catch (err) {
+      toast.erro(
+        err instanceof Error ? err.message : 'Erro ao excluir agendamento',
+      );
+    }
   }
 
   return (
@@ -141,13 +166,28 @@ export default function DashboardPage() {
                   {proximo?.id === item.id && (
                     <ProximoLabel>Próximo</ProximoLabel>
                   )}
-                  <AppointmentCard agendamento={item} onClick={abrir} />
+                  <AppointmentCard
+                    agendamento={item}
+                    onClick={abrir}
+                    onDelete={setAgendamentoParaExcluir}
+                  />
                 </ItemProximo>
               ))}
             </Lista>
           )}
         </section>
       </Body>
+
+      <ConfirmDialog
+        open={Boolean(agendamentoParaExcluir)}
+        title="Excluir agendamento?"
+        description={`Esta ação remove permanentemente o agendamento de ${agendamentoParaExcluir?.cliente_id?.nome ?? 'este cliente'}. Para manter o histórico, use "Cancelar" em vez de excluir.`}
+        confirmLabel="Excluir"
+        cancelLabel="Voltar"
+        destructive
+        onConfirm={handleConfirmarExclusao}
+        onCancel={() => setAgendamentoParaExcluir(null)}
+      />
     </>
   );
 }

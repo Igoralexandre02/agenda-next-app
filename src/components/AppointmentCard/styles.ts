@@ -27,7 +27,7 @@ function normalizarStatus(status: Status | null): StatusNome | null {
   return null;
 }
 
-export const Card = styled.button<{ $status: Status | null }>`
+export const Card = styled.div<{ $status: Status | null }>`
   position: relative;
   display: flex;
   align-items: center;
@@ -58,6 +58,11 @@ export const Card = styled.button<{ $status: Status | null }>`
 
   &:active {
     transform: scale(0.985);
+  }
+
+  &:has([data-dropdown-open='true']) {
+    transform: none;
+    z-index: 20;
   }
 
   &:focus-visible {
@@ -122,24 +127,4 @@ export const Phone = styled.span`
 
 export const BadgeRow = styled.div`
   margin-top: 2px;
-`;
-
-export const ArrowSlot = styled.div`
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  color: ${({ theme }) => theme.colors.textSubtle};
-  transition:
-    transform 120ms ease,
-    color 120ms ease;
-
-  svg {
-    width: 18px;
-    height: 18px;
-  }
-
-  ${Card}:hover & {
-    color: ${({ theme }) => theme.colors.text};
-    transform: translateX(2px);
-  }
 `;

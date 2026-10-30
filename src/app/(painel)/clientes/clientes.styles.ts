@@ -64,6 +64,7 @@ export const Lista = styled.div`
 `;
 
 export const ClienteCard = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -81,6 +82,10 @@ export const ClienteCard = styled.div`
     border-color: ${({ theme }) => theme.colors.borderStrong};
     background: ${({ theme }) => theme.colors.surfaceHover};
     box-shadow: ${({ theme }) => theme.shadows.sm};
+  }
+
+  &:has([data-dropdown-open='true']) {
+    z-index: 20;
   }
 `;
 
@@ -133,56 +138,5 @@ export const TelefoneText = styled.span`
   svg {
     width: 14px;
     height: 14px;
-  }
-`;
-
-export const Acoes = styled.div`
-  display: flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing.xs};
-  flex-shrink: 0;
-`;
-
-export const ActionButton = styled.button<{ $danger?: boolean }>`
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: ${({ theme }) => theme.radius.md};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  background: ${({ theme }) => theme.colors.surfaceMuted};
-  color: ${({ theme, $danger }) =>
-    $danger ? theme.colors.dangerText : theme.colors.textMuted};
-  cursor: pointer;
-  touch-action: manipulation;
-  user-select: none;
-  transition:
-    transform 100ms ${({ theme }) => theme.easing.out},
-    color 120ms ease,
-    background-color 120ms ease,
-    border-color 120ms ease;
-
-  svg {
-    width: 16px;
-    height: 16px;
-  }
-
-  &:hover {
-    color: ${({ theme, $danger }) =>
-      $danger ? theme.colors.dangerText : theme.colors.text};
-    background: ${({ theme, $danger }) =>
-      $danger ? theme.colors.dangerBg : theme.colors.surfaceRaised};
-    border-color: ${({ theme, $danger }) =>
-      $danger ? theme.colors.dangerText : theme.colors.borderStrong};
-  }
-
-  &:active {
-    transform: scale(0.92);
-  }
-
-  &:focus-visible {
-    outline: 2px solid ${({ theme }) => theme.colors.focusRing};
-    outline-offset: 2px;
   }
 `;
